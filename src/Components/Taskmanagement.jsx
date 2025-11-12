@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import Sidenavbar from './Sidenavbar';
+import { IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import {
   Button,
   TextField,
@@ -13,6 +15,8 @@ import {
   Modal,
   Box,
 } from '@mui/material';
+import Pagination from '@mui/material/Pagination';
+
 
 function Taskmanagement() {
   const [rows, setRows] = useState([
@@ -61,7 +65,6 @@ function Taskmanagement() {
       id: rows.length + 1,
       createdat: new Date().toISOString().split('T')[0],
     };
-    setRows([newTask, ...rows]);
     setOpen(false);
     setFormData({
       id: '',
@@ -99,7 +102,7 @@ function Taskmanagement() {
             className="w-[200px] mb-4"
           />
 
-          <TableContainer component={Paper}>
+          <TableContainer component={Paper} className='mt-4'>
             <Table>
               <TableHead>
                 <TableRow>
@@ -127,6 +130,7 @@ function Taskmanagement() {
               </TableBody>
             </Table>
           </TableContainer>
+
         </div>
 
         {/* Popup Form */}
@@ -145,8 +149,13 @@ function Taskmanagement() {
               zIndex: 10,
             }}
           >
+            <div className='flex justify-between'>
             <h2 className="text-xl font-bold mb-4 text-center">Add New Task</h2>
-            <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
+            <IconButton  onClick={() => setOpen(false)}>
+              <CloseIcon />
+            </IconButton>  
+            </div>         
+             <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
               <TextField
                 label="Name"
                 name="name"
