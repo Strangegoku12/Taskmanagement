@@ -1,28 +1,31 @@
 import React, { useState } from 'react';
 import Sidenavbar from './Sidenavbar';
-import { IconButton } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import {
-  Button,
-  TextField,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Modal,
-  Box,
+import { 
+  IconButton, 
+  Button, 
+  TextField, 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableContainer, 
+  TableHead, 
+  TableRow, 
+  Paper, 
+  Modal, 
+  Box, 
+  Pagination, 
+  Stack 
 } from '@mui/material';
-import Pagination from '@mui/material/Pagination';
-
+import CloseIcon from '@mui/icons-material/Close';
 
 function Taskmanagement() {
   const [rows, setRows] = useState([
     { id: 1, name: 'John', title: 'Fix Login Bug', status: 'Pending', totaltime: '2h', createdby: 'Admin', createdat: '2025-11-10' },
     { id: 2, name: 'Sara', title: 'Add Profile Page', status: 'In Progress', totaltime: '4h', createdby: 'Manager', createdat: '2025-11-08' },
     { id: 3, name: 'Mike', title: 'Deploy Backend', status: 'Completed', totaltime: '3h', createdby: 'Admin', createdat: '2025-11-05' },
+    { id: 4, name: 'Emma', title: 'Design Landing Page', status: 'Pending', totaltime: '5h', createdby: 'Designer', createdat: '2025-11-06' },
+    { id: 5, name: 'Alex', title: 'Fix Navbar Issue', status: 'Completed', totaltime: '2h', createdby: 'Admin', createdat: '2025-11-03' },
+    { id: 6, name: 'Liam', title: 'Integrate API', status: 'In Progress', totaltime: '6h', createdby: 'Developer', createdat: '2025-11-04' },
   ]);
 
   const [searched, setSearch] = useState({ searchvalue: '' });
@@ -36,10 +39,15 @@ function Taskmanagement() {
     createdby: '',
   });
 
+  // Pagination states
+  const [page, setPage] = useState(1);
+  const [rowsPerPage] = useState(5);
+
   // Search handler
   const handlechange = (e) => {
     const { name, value } = e.target;
     setSearch((prev) => ({ ...prev, [name]: value }));
+    setPage(1); // Reset to page 1 on new search
   };
 
   // Filter logic
@@ -51,6 +59,15 @@ function Taskmanagement() {
       row.createdby.toLowerCase().includes(searched.searchvalue.toLowerCase()) ||
       row.id.toString().includes(searched.searchvalue)
   );
+
+  // Pagination logic
+  const startIndex = (page - 1) * rowsPerPage;
+  const endIndex = startIndex + rowsPerPage;
+  const paginatedRows = filteredRows.slice(startIndex, endIndex);
+
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
 
   // Form handlers
   const handleFormChange = (e) => {
@@ -65,6 +82,7 @@ function Taskmanagement() {
       id: rows.length + 1,
       createdat: new Date().toISOString().split('T')[0],
     };
+    setRows((prev) => [...prev, newTask]);
     setOpen(false);
     setFormData({
       id: '',
@@ -90,7 +108,7 @@ function Taskmanagement() {
           </Button>
         </div>
 
-        {/* Table Section (fills remaining height) */}
+        {/* Table Section */}
         <div className="bg-white w-full flex-1 rounded-3xl p-6 overflow-auto relative">
           <TextField
             type="text"
@@ -102,7 +120,7 @@ function Taskmanagement() {
             className="w-[200px] mb-4"
           />
 
-          <TableContainer component={Paper} className='mt-4'>
+          <TableContainer component={Paper} className="mt-4">
             <Table>
               <TableHead>
                 <TableRow>
@@ -116,7 +134,7 @@ function Taskmanagement() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {filteredRows.map((row) => (
+                {paginatedRows.map((row) => (
                   <TableRow key={row.id}>
                     <TableCell>{row.id}</TableCell>
                     <TableCell>{row.name}</TableCell>
@@ -131,6 +149,16 @@ function Taskmanagement() {
             </Table>
           </TableContainer>
 
+          {/* Pagination */}
+          <Stack spacing={2} className="mt-4 flex justify-end ">
+            <Pagination
+              count={Math.ceil(filteredRows.length / rowsPerPage)}
+              page={page}
+              onChange={handlePageChange}
+              showFirstButton
+              showLastButton
+            />
+          </Stack>
         </div>
 
         {/* Popup Form */}
@@ -149,13 +177,14 @@ function Taskmanagement() {
               zIndex: 10,
             }}
           >
-            <div className='flex justify-between'>
-            <h2 className="text-xl font-bold mb-4 text-center">Add New Task</h2>
-            <IconButton  onClick={() => setOpen(false)}>
-              <CloseIcon />
-            </IconButton>  
-            </div>         
-             <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
+            <div className="flex justify-between">
+              <h2 className="text-xl font-bold mb-4 text-center">Add New Task</h2>
+              <IconButton onClick={() => setOpen(false)}>
+                <CloseIcon />
+              </IconButton>
+            </div>
+
+            <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
               <TextField
                 label="Name"
                 name="name"
