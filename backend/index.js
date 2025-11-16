@@ -1,7 +1,13 @@
 const express=require("express")
 const app=express()
-
+const connectmongo=require('./router/connect')
+const loginsignup=require('./router/LoginSignuproute')
 app.use(express.json())
+
+
+connectmongo()
+
+app.use('/',loginsignup)
 
 app.get('/',(req,res)=>{
     res.send("Welcome to Task Management API")
