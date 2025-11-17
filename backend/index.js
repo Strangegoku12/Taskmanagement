@@ -1,7 +1,7 @@
 const express=require("express")
 const app=express()
 const connectmongo=require('./router/connect')
-const loginsignup=require('./router/LoginSignuproute')
+const loginsignup=require("./router/LoginSignuproute")
 app.use(express.json())
 
 

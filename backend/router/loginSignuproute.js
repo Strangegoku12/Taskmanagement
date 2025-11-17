@@ -1,9 +1,8 @@
-const express = require('express');
-const app=express();
-const router=require(express.Router())
+const express = require("express");
+const router = express.Router();
 const loginSchema=require('../model/loginModel')
 const signupSchema=require('../model/signupModel')
-const bcrypt = require('bcryptjs');
+const bcrypt = require("bcrypt");
 
 
 router.post('/signup',async(req,res)=>{
@@ -24,6 +23,15 @@ router.post('/signup',async(req,res)=>{
     }catch(err){
        console.error('Error:', err);
        return  res.status(500).json({ message: 'Server error' });
+    }
+})
+
+router.post('/login',(req,res)=>{
+    try{
+        const{email,password}=req.body
+
+    }catch(err){
+
     }
 })
 
