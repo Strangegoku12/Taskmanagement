@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import Sidenavbar from './Sidenavbar';
-import { 
-  IconButton, 
-  Button, 
-  TextField, 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableContainer, 
-  TableHead, 
-  TableRow, 
-  Paper, 
-  Modal, 
-  Box, 
-  Pagination, 
-  Stack 
+import {
+  IconButton,
+  Button,
+  TextField,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Modal,
+  Box,
+  Pagination,
+  Stack
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
