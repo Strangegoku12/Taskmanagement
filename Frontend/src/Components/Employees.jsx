@@ -18,9 +18,8 @@ import {
   Stack
 } from '@mui/material';
 
-
-function About() {
-  return (
+function Employees(){
+return(
     <>
       <div className="flex h-screen">
         <Sidenavbar />
@@ -108,7 +107,7 @@ function About() {
         </div>
       </div>
     </>
-  )
+)
 }
 
-export default About
+export default Employees

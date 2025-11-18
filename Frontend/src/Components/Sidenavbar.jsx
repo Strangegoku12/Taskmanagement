@@ -1,4 +1,5 @@
 import '../App.css'
+import { MdOutlineDashboardCustomize } from "react-icons/md";
 
 function Sidenavbar() {
   return (
@@ -20,6 +21,7 @@ function Sidenavbar() {
         <div className='flex justify-center mb-6'>
           <ul className='space-y-8'>
             <li className="mb-2 hovereringnavbar"><a href="/dashboard" className="flex items-center gap-2 text-gray-800"> <MdOutlineDashboardCustomize className="text-xl" /> <span>Dashboard</span> </a> </li>
+            <li className="mb-2 hovereringnavbar"><a href="/employees" className="flex items-center gap-2 text-gray-800">    <MdOutlineDashboardCustomize className="text-xl" /><span>Employee</span></a></li>
             <li className="mb-2 hovereringnavbar"><a href="/task" className="flex items-center gap-2 text-gray-800">    <MdOutlineDashboardCustomize className="text-xl" /><span>Tasks</span></a></li>
             <li className="mb-2 hovereringnavbar"><a href="/report" className="flex items-center gap-2 text-gray-800">    <MdOutlineDashboardCustomize className="text-xl" /><span>Report</span></a></li>
             <li className="mb-2 hovereringnavbar"><a href="/about" className="flex items-center gap-2 text-gray-800"><MdOutlineDashboardCustomize className="text-xl" /> <span>About</span></a></li>

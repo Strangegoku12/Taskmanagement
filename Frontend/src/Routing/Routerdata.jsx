@@ -7,7 +7,7 @@ const About = lazy(()=>import ("../Components/About"));
 const Taskmanagement = lazy(() => import("../Components/Taskmanagement"));
 const Report= lazy(()=>import("../Components/Report"))
 const Dashboard=lazy(()=>import("../Components/Dashboard"))
-
+const Employees=lazy(()=>import("../Components/Employees"))
 function Routerdata() {
   return (
     <Router>
@@ -18,6 +18,7 @@ function Routerdata() {
           <Route path="/report" element={<Report/>} />
           <Route path="/about" element={<About />} />
           <Route path="/logout" element={<Logout />} />
+          <Route path="/employees" element={<Employees/>}/>
         </Routes>
       </Suspense>
     </Router>
