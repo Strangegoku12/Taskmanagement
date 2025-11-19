@@ -11,6 +11,7 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Avatar,
   Modal,
   Box,
   Pagination,
@@ -20,7 +21,37 @@ import { useState } from "react";
 
 
 function Employees() {
-  const[open,setOpen]=useState(false)
+  const [open, setOpen] = useState(false)
+  const [image, setImage] = useState(null);
+const [employeeform,setemployeeForm]=useState({
+  image:'',
+  empid:'',
+  fullname:'',
+  date_of_birth:'',
+  gender:'',
+  phone_number:'',
+  email_id:'',
+  department:'',
+  designation:'',
+  date_of_joining:'',
+  reporting_manager:''
+})
+
+function handleformchange(e){
+  const {name,value}=e.target
+  setemployeeForm((prev)=>({...prev,[name]:value}))
+
+}
+
+function handlesubmitemployeeform(e){
+      e.preventDefault();
+
+  console.log("show the employeeform",employeeform)
+}
+
+  const handleImage = (e) => {
+    setImage(URL.createObjectURL(e.target.files[0]));
+  };
   return (
     <>
       <div className="flex h-screen">
@@ -29,7 +60,7 @@ function Employees() {
         <div className="flex-1 p-8 bg-gray-200 flex flex-col">
           <div className="flex justify-between">
             <h1>Employee Managemenet System</h1>
-            <Button variant="contained" color="primary" onClick={()=>setOpen(true)}>Add Employee</Button>
+            <Button variant="contained" color="primary" onClick={() => setOpen(true)}>Add Employee</Button>
           </div>
           <div className="bg-white w-full flex-1 rounded-3xl p-6 overflow-auto relative">
             <div>
@@ -60,59 +91,105 @@ function Employees() {
       </div>
 
 
-       <Modal open={open} onClose={() => setOpen(false)}>
-                <Box
-                  sx={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    width: 600,
-                    bgcolor: 'background.paper',
-                    boxShadow: 24,
-                    p: 4,
-                    borderRadius: 3,
-                    zIndex: 10,
-                  }}
-                >
-                  <div className="flex justify-between">
-                    <h2 className="text-xl font-bold mb-4 text-center">Add New Task</h2>
+      <Modal open={open} onClose={() => setOpen(false)}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 600,
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 3,
+            zIndex: 10,
+            maxHeight: '90vh',     
+            overflowY: 'auto',     
+          }}
+        >
+          <div className="flex justify-between">
+            <h2 className="text-xl font-bold mb-4 text-center">Add New Employee</h2>
 
-                  </div>
+          </div>
 
-                  <form  className="grid grid-cols-2 gap-4">
-                    <TextField
-                      label="Name"
-                      name="name"
+          {/* <div className="h-[500px] overflow-auto p-4 bg-white rounded-xl shadow-md"> */}
 
-                      required
-                    />
-                    <TextField
-                      label="Task Title"
-                      name="title"
+            <form onSubmit={handlesubmitemployeeform} className="space-y-4">
+              <div className="flex  flex-col items-center space-y-3">
+                <Avatar src={image} sx={{ width: 80, height: 80 }} />
 
-                      required
-                    />
-                    <TextField
-                      label="Status"
-                      name="status"
+                <Button variant="contained" component="label">
+                  Upload Image
+                  <input
+                    type="file"
+                    accept="image/*"
+                    hidden
+                    name="image"
+                    value={employeeform.image}
+                    onChange={handleImage}
+                  />
+                </Button>
+              </div>
+              <div>
+                <label className="font-medium">Employee ID:</label>
+                <TextField fullWidth name="empid" value={employeeform.empid}  size="small" onChange={handleformchange} placeholder="Enter Employee ID" />
+              </div>
 
-                      required
-                    />
-                    <TextField
-                      label="Total Time"
-                      name="totaltime"
+              <div>
+                <label className="font-medium">Full Name:</label>
+                <TextField fullWidth name="fullname" value={employeeform.fullname} size="small" onChange={handleformchange}  placeholder="Enter Full Name" />
+              </div>
 
-                    />
-                    <TextField
-                      label="Created By"
-                      name="createdby"
+              <div>
+                <label className="font-medium">Date of Birth:</label>
+                <TextField fullWidth value={employeeform.date_of_birth} name="date_of_birth" size="small" onChange={handleformchange}  placeholder="DD/MM/YYYY" />
+              </div>
 
-                    />
+              <div>
+                <label className="font-medium">Gender:</label>
+                <TextField fullWidth name="gender" value={employeeform.gender} size="small" onChange={handleformchange}  placeholder="Gender" />
+              </div>
 
-                  </form>
-                </Box>
-              </Modal>
+              <div>
+                <label className="font-medium">Phone Number:</label>
+                <TextField fullWidth size="small" onChange={handleformchange} value={employeeform.phone_number} name="phone_number"  placeholder="Phone Number" />
+              </div>
+
+              <div>
+                <label className="font-medium">Email ID:</label>
+                <TextField fullWidth size="small" onChange={handleformchange} name="email_id" value={employeeform.email_id}  placeholder="Email ID" />
+              </div>
+
+              <div>
+                <label className="font-medium">Department:</label>
+                <TextField fullWidth size="small" onChange={handleformchange} value={employeeform.department} name="department"  placeholder="Department" />
+              </div>
+
+              <div>
+                <label className="font-medium">Designation:</label>
+                <TextField fullWidth size="small" onChange={handleformchange} value={employeeform.designation} name="designation"  placeholder="Designation" />
+              </div>
+
+              <div>
+                <label className="font-medium">Date of Joining:</label>
+                <TextField fullWidth size="small" onChange={handleformchange} value={employeeform.date_of_joining} name="date_of_joining"  placeholder="DD/MM/YYYY" />
+              </div>
+
+              <div>
+                <label className="font-medium">Reporting Manager:</label>
+                <TextField fullWidth size="small" onChange={handleformchange} name="reporting_manager" value={employeeform.reporting_manager}  placeholder="Manager Name" />
+              </div>
+
+
+
+              <Button type="submit" variant="contained" size="medium" color="primary">Save</Button>
+
+            </form>
+          {/* </div> */}
+
+        </Box>
+      </Modal>
     </>
   )
 }

@@ -5,7 +5,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 const Logout=lazy(()=>import ("../Components/Logout"));
 const About = lazy(()=>import ("../Components/About"));
 const Taskmanagement = lazy(() => import("../Components/Taskmanagement"));
-const Report= lazy(()=>import("../Components/Report"))
 const Dashboard=lazy(()=>import("../Components/Dashboard"))
 const Employees=lazy(()=>import("../Components/Employees"))
 function Routerdata() {
@@ -15,7 +14,6 @@ function Routerdata() {
         <Routes>
           <Route path="/dashboard" element={<Dashboard/>} />
           <Route path="/task" element={<Taskmanagement />} />
-          <Route path="/report" element={<Report/>} />
           <Route path="/about" element={<About />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/employees" element={<Employees/>}/>
