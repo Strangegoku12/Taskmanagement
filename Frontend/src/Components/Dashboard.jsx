@@ -148,7 +148,7 @@ function Dashboard() {
 
             {/* Box 3 - Bottom Left */}
             <div className="bg-gray-50 rounded-2xl shadow flex flex-col p-2 items-center pt-4 ">
-              <ReactApexChart options={chartData.options} series={chartData.series} type="donut" width="450" />
+              <ReactApexChart options={chartData.options} series={chartData.series} type="donut" width="350" />
 
             </div>
 
@@ -158,7 +158,7 @@ function Dashboard() {
                 options={empPerformance.options}
                 series={empPerformance.series}
                 type="bar"
-                width="500"
+                width="450"
               />
             </div>
 

@@ -39,18 +39,17 @@ function Taskmanagement() {
     createdby: '',
   });
 
-  // Pagination states
+  // Pagination
   const [page, setPage] = useState(1);
   const [rowsPerPage] = useState(5);
 
-  // Search handler
   const handlechange = (e) => {
     const { name, value } = e.target;
     setSearch((prev) => ({ ...prev, [name]: value }));
-    setPage(1); // Reset to page 1 on new search
+    setPage(1);
   };
 
-  // Filter logic
+  // Search filters
   const filteredRows = rows.filter(
     (row) =>
       row.title.toLowerCase().includes(searched.searchvalue.toLowerCase()) ||
@@ -60,7 +59,6 @@ function Taskmanagement() {
       row.id.toString().includes(searched.searchvalue)
   );
 
-  // Pagination logic
   const startIndex = (page - 1) * rowsPerPage;
   const endIndex = startIndex + rowsPerPage;
   const paginatedRows = filteredRows.slice(startIndex, endIndex);
@@ -69,7 +67,6 @@ function Taskmanagement() {
     setPage(value);
   };
 
-  // Form handlers
   const handleFormChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -98,9 +95,7 @@ function Taskmanagement() {
     <div className="flex h-screen">
       <Sidenavbar />
 
-      {/* Main Content */}
       <div className="flex-1 p-8 bg-gray-200 flex flex-col">
-        {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold mb-4">Task Manager</h1>
           <Button variant="contained" color="primary" onClick={() => setOpen(true)}>
@@ -108,8 +103,8 @@ function Taskmanagement() {
           </Button>
         </div>
 
-        {/* Table Section */}
         <div className="bg-white w-full flex-1 rounded-3xl p-6 overflow-auto relative">
+
           <TextField
             type="text"
             label="Search"
@@ -124,7 +119,7 @@ function Taskmanagement() {
           <TableContainer component={Paper} className="mt-4">
             <Table>
               <TableHead>
-                <TableRow className='text-secondary  bg-blue-400 px-6 py-4 text-md font-semibold shadow dark:bg-black dark:bg-opacity-5 md:px-8'>
+                <TableRow className="text-secondary bg-blue-400 px-6 py-4 text-md font-semibold shadow dark:bg-black dark:bg-opacity-5 md:px-8">
                   <TableCell><b>ID</b></TableCell>
                   <TableCell><b>Name</b></TableCell>
                   <TableCell><b>Task Title</b></TableCell>
@@ -134,6 +129,7 @@ function Taskmanagement() {
                   <TableCell><b>Created At</b></TableCell>
                 </TableRow>
               </TableHead>
+
               <TableBody>
                 {paginatedRows.map((row) => (
                   <TableRow key={row.id}>
@@ -150,9 +146,13 @@ function Taskmanagement() {
             </Table>
           </TableContainer>
 
-          {/* Pagination */}
-          <Stack spacing={2} className="mt-4 flex justify-end ">
+          {/* Pagination at bottom */}
+          <Stack
+            spacing={2}
+            className="absolute bottom-10 right-[500px]"
+          >
             <Pagination
+            variant="outlined" shape="rounded"
               count={Math.ceil(filteredRows.length / rowsPerPage)}
               page={page}
               onChange={handlePageChange}
@@ -162,93 +162,38 @@ function Taskmanagement() {
           </Stack>
         </div>
 
-        {/* Popup Form */}
-  <Modal open={open} onClose={() => setOpen(false)}>
-  <Box
-    sx={{
-      position: "absolute",
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)",
-      width: 450,
-      bgcolor: "background.paper",
-      boxShadow: 24,
-      p: 4,
-      borderRadius: 3,
-    }}
-  >
-    {/* Header */}
-    <div className="flex items-center justify-between mb-4">
-      <h2 className="text-2xl font-semibold">Add New Task</h2>
-      <IconButton onClick={() => setOpen(false)}>
-        <CloseIcon />
-      </IconButton>
-    </div>
+        <Modal open={open} onClose={() => setOpen(false)}>
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 450,
+              bgcolor: "background.paper",
+              boxShadow: 24,
+              p: 4,
+              borderRadius: 3,
+            }}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-2xl font-semibold">Add New Task</h2>
+              <IconButton onClick={() => setOpen(false)}>
+                <CloseIcon />
+              </IconButton>
+            </div>
 
-    {/* Form */}
-    <form
-      onSubmit={handleSubmit}
-      className="space-y-4"
-    >
-      <TextField
-        fullWidth
-        label="Name"
-        name="name"
-        value={formData.name}
-        size="small"
-        onChange={handleFormChange}
-        required
-      />
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <TextField fullWidth label="Name" name="name" size="small" value={formData.name} onChange={handleFormChange} required />
+              <TextField fullWidth label="Task Title" name="title" size="small" value={formData.title} onChange={handleFormChange} required />
+              <TextField fullWidth label="Status" name="status" size="small" value={formData.status} onChange={handleFormChange} required />
+              <TextField fullWidth label="Total Time" name="totaltime" size="small" value={formData.totaltime} onChange={handleFormChange} />
+              <TextField fullWidth label="Created By" name="createdby" size="small" value={formData.createdby} onChange={handleFormChange} />
 
-      <TextField
-        fullWidth
-        label="Task Title"
-        name="title"
-        size="small"
-        value={formData.title}
-        onChange={handleFormChange}
-        required
-      />
-
-      <TextField
-        fullWidth
-        label="Status"
-        name="status"
-        size="small"
-        value={formData.status}
-        onChange={handleFormChange}
-        required
-      />
-
-      <TextField
-        fullWidth
-        label="Total Time"
-        name="totaltime"
-        size="small"
-        value={formData.totaltime}
-        onChange={handleFormChange}
-      />
-
-      <TextField
-        fullWidth
-        label="Created By"
-        name="createdby"
-        size="small"
-        value={formData.createdby}
-        onChange={handleFormChange}
-      />
-
-      <Button
-        fullWidth
-        type="submit"
-        variant="contained"
-        color="success"
-      >
-        Save Task
-      </Button>
-    </form>
-  </Box>
-</Modal>
+              <Button fullWidth type="submit" variant="contained" color="success">Save Task</Button>
+            </form>
+          </Box>
+        </Modal>
 
       </div>
     </div>
