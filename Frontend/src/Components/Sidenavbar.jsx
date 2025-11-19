@@ -17,7 +17,7 @@ function Sidenavbar() {
         <div className='flex justify-center mb-6 mt-2'>
           <img
             className='w-40 h-40 object-cover rounded-full border'
-            src="your-image-url-here"
+            src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="profile"
           />
         </div>
