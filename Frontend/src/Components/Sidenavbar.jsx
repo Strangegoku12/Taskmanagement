@@ -30,7 +30,7 @@ function Sidenavbar() {
         <div className='flex justify-center mb-6'>
           <ul className='space-y-8'>
             <li className="mb-2 hovereringnavbar">
-              <a href="/dashboard" className="flex items-center gap-2 text-gray-800">
+              <a href="/dashboard" className="flex items-center gap-2  text-gray-800">
                 <MdOutlineDashboardCustomize className="text-xl" />
                 <span>Dashboard</span>
               </a>
@@ -59,7 +59,7 @@ function Sidenavbar() {
           </ul>
         </div>
 
-        {/* 🔴 LOGOUT BUTTON */}
+        {/*  LOGOUT BUTTON */}
         <div className='flex justify-center mt-10'>
           <button
             onClick={handleLogout}
