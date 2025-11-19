@@ -1,7 +1,15 @@
 import '../App.css'
 import { MdOutlineDashboardCustomize } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 function Sidenavbar() {
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    navigate("/");
+  };
+
   return (
     <>
       <div className='w-[250px] h-screen bg-white text-black p-4'>
@@ -13,6 +21,7 @@ function Sidenavbar() {
             alt="profile"
           />
         </div>
+
         <div className='text-center mb-6'>
           <h1>Anany</h1>
           <p>ananytiwari415@gmail.com</p>
@@ -20,16 +29,49 @@ function Sidenavbar() {
 
         <div className='flex justify-center mb-6'>
           <ul className='space-y-8'>
-            <li className="mb-2 hovereringnavbar"><a href="/dashboard" className="flex items-center gap-2 text-gray-800"> <MdOutlineDashboardCustomize className="text-xl" /> <span>Dashboard</span> </a> </li>
-            <li className="mb-2 hovereringnavbar"><a href="/employees" className="flex items-center gap-2 text-gray-800">    <MdOutlineDashboardCustomize className="text-xl" /><span>Employee</span></a></li>
-            <li className="mb-2 hovereringnavbar"><a href="/task" className="flex items-center gap-2 text-gray-800">    <MdOutlineDashboardCustomize className="text-xl" /><span>Tasks</span></a></li>
-            <li className="mb-2 hovereringnavbar"><a href="/about" className="flex items-center gap-2 text-gray-800"><MdOutlineDashboardCustomize className="text-xl" /> <span>About</span></a></li>
-            <li className="mb-2 hovereringnavbar"><a href="/logout" className="flex items-center gap-2 text-gray-800"><MdOutlineDashboardCustomize className="text-xl" /> <span>Logout</span></a></li>
+            <li className="mb-2 hovereringnavbar">
+              <a href="/dashboard" className="flex items-center gap-2 text-gray-800">
+                <MdOutlineDashboardCustomize className="text-xl" />
+                <span>Dashboard</span>
+              </a>
+            </li>
+
+            <li className="mb-2 hovereringnavbar">
+              <a href="/employees" className="flex items-center gap-2 text-gray-800">
+                <MdOutlineDashboardCustomize className="text-xl" />
+                <span>Employee</span>
+              </a>
+            </li>
+
+            <li className="mb-2 hovereringnavbar">
+              <a href="/task" className="flex items-center gap-2 text-gray-800">
+                <MdOutlineDashboardCustomize className="text-xl" />
+                <span>Tasks</span>
+              </a>
+            </li>
+
+            <li className="mb-2 hovereringnavbar">
+              <a href="/about" className="flex items-center gap-2 text-gray-800">
+                <MdOutlineDashboardCustomize className="text-xl" />
+                <span>About</span>
+              </a>
+            </li>
           </ul>
         </div>
-      </div> 
+
+        {/* 🔴 LOGOUT BUTTON */}
+        <div className='flex justify-center mt-10'>
+          <button
+            onClick={handleLogout}
+            className='bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg shadow-md w-full'
+          >
+            Logout
+          </button>
+        </div>
+
+      </div>
     </>
   )
 }
 
-export default Sidenavbar
+export default Sidenavbar;

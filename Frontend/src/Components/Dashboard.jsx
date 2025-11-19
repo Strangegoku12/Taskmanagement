@@ -39,9 +39,8 @@ function Dashboard() {
       <Sidenavbar />
 
       <div className="flex-1 p-8 bg-gray-200 flex flex-col">
+        <h1 className="text-2xl font-semibold mb-6">Dashboard</h1>
         <div className="bg-white w-full flex-1 rounded-3xl p-6 overflow-auto relative">
-          <h1 className="text-2xl font-semibold mb-6">Dashboard</h1>
-
           {/* ✅ Apex Pie Chart */}
           <div className="flex flex-wrap justify-around gap-6">
             {/* Chart 1 */}
