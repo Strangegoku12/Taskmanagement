@@ -114,6 +114,7 @@ function Taskmanagement() {
             type="text"
             label="Search"
             name="searchvalue"
+            size="small"
             onChange={handlechange}
             value={searched.searchvalue}
             variant="outlined"
@@ -123,7 +124,7 @@ function Taskmanagement() {
           <TableContainer component={Paper} className="mt-4">
             <Table>
               <TableHead>
-                <TableRow>
+                <TableRow className='text-secondary  bg-blue-400 px-6 py-4 text-md font-semibold shadow dark:bg-black dark:bg-opacity-5 md:px-8'>
                   <TableCell><b>ID</b></TableCell>
                   <TableCell><b>Name</b></TableCell>
                   <TableCell><b>Task Title</b></TableCell>
@@ -162,73 +163,93 @@ function Taskmanagement() {
         </div>
 
         {/* Popup Form */}
-        <Modal open={open} onClose={() => setOpen(false)}>
-          <Box
-            sx={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: 600,
-              bgcolor: 'background.paper',
-              boxShadow: 24,
-              p: 4,
-              borderRadius: 3,
-              zIndex: 10,
-            }}
-          >
-            <div className="flex justify-between">
-              <h2 className="text-xl font-bold mb-4 text-center">Add New Task</h2>
-              <IconButton onClick={() => setOpen(false)}>
-                <CloseIcon />
-              </IconButton>
-            </div>
+  <Modal open={open} onClose={() => setOpen(false)}>
+  <Box
+    sx={{
+      position: "absolute",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      width: 450,
+      bgcolor: "background.paper",
+      boxShadow: 24,
+      p: 4,
+      borderRadius: 3,
+    }}
+  >
+    {/* Header */}
+    <div className="flex items-center justify-between mb-4">
+      <h2 className="text-2xl font-semibold">Add New Task</h2>
+      <IconButton onClick={() => setOpen(false)}>
+        <CloseIcon />
+      </IconButton>
+    </div>
 
-            <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
-              <TextField
-                label="Name"
-                name="name"
-                value={formData.name}
-                onChange={handleFormChange}
-                required
-              />
-              <TextField
-                label="Task Title"
-                name="title"
-                value={formData.title}
-                onChange={handleFormChange}
-                required
-              />
-              <TextField
-                label="Status"
-                name="status"
-                value={formData.status}
-                onChange={handleFormChange}
-                required
-              />
-              <TextField
-                label="Total Time"
-                name="totaltime"
-                value={formData.totaltime}
-                onChange={handleFormChange}
-              />
-              <TextField
-                label="Created By"
-                name="createdby"
-                value={formData.createdby}
-                onChange={handleFormChange}
-              />
-              <Button
-                type="submit"
-                variant="contained"
-                color="success"
-                sx={{ gridColumn: 'span 2' }}
-              >
-                Save Task
-              </Button>
-            </form>
-          </Box>
-        </Modal>
+    {/* Form */}
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-4"
+    >
+      <TextField
+        fullWidth
+        label="Name"
+        name="name"
+        value={formData.name}
+        size="small"
+        onChange={handleFormChange}
+        required
+      />
+
+      <TextField
+        fullWidth
+        label="Task Title"
+        name="title"
+        size="small"
+        value={formData.title}
+        onChange={handleFormChange}
+        required
+      />
+
+      <TextField
+        fullWidth
+        label="Status"
+        name="status"
+        size="small"
+        value={formData.status}
+        onChange={handleFormChange}
+        required
+      />
+
+      <TextField
+        fullWidth
+        label="Total Time"
+        name="totaltime"
+        size="small"
+        value={formData.totaltime}
+        onChange={handleFormChange}
+      />
+
+      <TextField
+        fullWidth
+        label="Created By"
+        name="createdby"
+        size="small"
+        value={formData.createdby}
+        onChange={handleFormChange}
+      />
+
+      <Button
+        fullWidth
+        type="submit"
+        variant="contained"
+        color="success"
+      >
+        Save Task
+      </Button>
+    </form>
+  </Box>
+</Modal>
+
       </div>
     </div>
   );

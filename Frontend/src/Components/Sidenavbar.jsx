@@ -7,7 +7,7 @@ function Sidenavbar() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    navigate("/");
+    navigate("/login");
   };
 
   return (

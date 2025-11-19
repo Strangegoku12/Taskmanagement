@@ -58,9 +58,9 @@ function handlesubmitemployeeform(e){
         <Sidenavbar />
 
         <div className="flex-1 p-8 bg-gray-200 flex flex-col">
-          <div className="flex justify-between">
+          <div className="flex justify-between mb-2">
             <h1>Employee Managemenet System</h1>
-            <Button variant="contained" color="primary" onClick={() => setOpen(true)}>Add Employee</Button>
+            <Button  variant="contained" color="primary" onClick={() => setOpen(true)}>Add Employee</Button>
           </div>
           <div className="bg-white w-full flex-1 rounded-3xl p-6 overflow-auto relative">
             <div>
@@ -68,7 +68,7 @@ function handlesubmitemployeeform(e){
               <TableContainer component={Paper} className="mt-4">
                 <Table>
                   <TableHead>
-                    <TableRow>
+                    <TableRow className="text-secondary  bg-blue-400 px-6 py-4 text-md font-semibold shadow dark:bg-black dark:bg-opacity-5 md:px-8">
                       <TableCell><b>ID</b></TableCell>
                       <TableCell><b>Name</b></TableCell>
                     </TableRow>

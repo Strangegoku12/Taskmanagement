@@ -1,7 +1,23 @@
 import React, { useState } from "react";
 import Sidenavbar from "./Sidenavbar";
 import Chart from "react-apexcharts";
-import { Button } from "@mui/material";
+
+import {
+  IconButton,
+  Button,
+  TextField,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Modal,
+  Box,
+  Pagination,
+  Stack
+} from '@mui/material';
 
 function Dashboard() {
   const [chartData] = useState({
@@ -41,32 +57,89 @@ function Dashboard() {
       <div className="flex-1 p-8 bg-gray-200 flex flex-col">
         <h1 className="text-2xl font-semibold mb-6">Dashboard</h1>
         <div className="bg-white w-full flex-1 rounded-3xl p-6 overflow-auto relative">
-          {/* ✅ Apex Pie Chart */}
-          <div className="flex flex-wrap justify-around gap-6">
-            {/* Chart 1 */}
-            <div className="flex flex-col justify-center items-center bg-gray-50 rounded-2xl p-4 shadow w-[45%]">
-              <Chart options={chartData.options} series={chartData.series} type="pie" width="250" />
-              <Button className="mt-4" variant="contained">View Details</Button>
+          <div className="grid grid-cols-2 grid-rows-2 h-screen w-full gap-4 p-4">
+
+            {/* Box 1 - Top Left */}
+            <div className="bg-gray-50 rounded-2xl shadow flex flex-col p-2">
+              <h1>Task Status</h1>
+              <TextField
+                type="text"
+                label="Search"
+                name="searchvalue"
+                size="small"
+
+
+                variant="outlined"
+                className="w-[200px] mb-4"
+              />
+              <TableContainer component={Paper} className="mt-4">
+                <Table>
+                  <TableHead>
+                    <TableRow className="text-secondary bg-blue-400 px-6 py-4 text-md font-semibold shadow dark:bg-black dark:bg-opacity-5 md:px-8">
+                      <TableCell><b>ID</b></TableCell>
+                      <TableCell><b>Name</b></TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+
+                    <TableRow>
+                      <TableCell>Anany</TableCell>
+                      <TableCell>Anany12</TableCell>
+                    </TableRow>
+
+                  </TableBody>
+                </Table>
+              </TableContainer>
             </div>
 
-            {/* Chart 2 */}
-            <div className="flex flex-col justify-center items-center bg-gray-50 rounded-2xl p-4 shadow w-[45%]">
-              <Chart options={chartData.options} series={chartData.series} type="pie" width="250" />
-              <Button className="mt-4" variant="contained">View Details</Button>
+            {/* Box 2 - Top Right */}
+            <div className="bg-gray-50 rounded-2xl shadow flex flex-col p-2">
+              <h1>Employee Table</h1>
+              <TextField
+                type="text"
+                label="Search"
+                name="searchvalue"
+                size="small"
+
+
+                variant="outlined"
+                className="w-[200px] mb-4"
+              />
+              <TableContainer component={Paper} className="mt-4">
+                <Table>
+                  <TableHead className="text-secondary  bg-blue-400 px-6 py-4 text-md font-semibold shadow dark:bg-black dark:bg-opacity-5 md:px-8">
+                    <TableRow>
+                      <TableCell><b>ID</b></TableCell>
+                      <TableCell><b>Name</b></TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+
+                    <TableRow>
+                      <TableCell>Anany</TableCell>
+                      <TableCell>Anany12</TableCell>
+                    </TableRow>
+
+                  </TableBody>
+                </Table>
+              </TableContainer>
             </div>
 
-            {/* Chart 3 */}
-            <div className="flex flex-col justify-center items-center bg-gray-50 rounded-2xl p-4 shadow w-[45%]">
-              <Chart options={chartData.options} series={chartData.series} type="pie" width="250" />
-              <Button className="mt-4" variant="contained">View Details</Button>
+            {/* Box 3 - Bottom Left */}
+            <div className="bg-gray-50 rounded-2xl shadow flex flex-col p-2">
+              <h1>Project Performance</h1>
+              <Chart options={chartData.options} series={chartData.series} type="pie" width="230" />
+              <Button variant="contained" className="mt-4">View Details</Button>
             </div>
 
-            {/* Chart 4 */}
-            <div className="flex flex-col justify-center items-center bg-gray-50 rounded-2xl p-4 shadow w-[45%]">
-              <Chart options={chartData.options} series={chartData.series} type="pie" width="250" />
-              <Button className="mt-4" variant="contained">View Details</Button>
-            </div>
+            {/* Box 4 - Bottom Right */}
+            <div className="bg-gray-50 rounded-2xl shadow flex flex-col p-2">
+              <h1>Employee Performance</h1>
+              <Chart options={chartData.options} series={chartData.series} type="pie" width="230" />
+              <Button variant="contained" className="mt-4">View Details</Button>            </div>
+
           </div>
+
 
         </div>
       </div>
