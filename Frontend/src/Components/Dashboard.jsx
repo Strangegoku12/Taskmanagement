@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Sidenavbar from "./Sidenavbar";
 import Chart from "react-apexcharts";
+import ReactApexChart from "react-apexcharts";
 
 import {
   IconButton,
@@ -21,31 +22,116 @@ import {
 
 function Dashboard() {
   const [chartData] = useState({
-    series: [44, 55, 13, 43, 22], // values for pie chart
+    series: [20, 20, 60],
     options: {
       chart: {
-        width: 380,
-        type: "pie",
+        type: 'donut',
       },
-      labels: ["Apple", "Mango", "Banana", "Grapes", "Orange"],
+      labels: ["Pending", "Completed", "In-Progress"],
+      legend: {
+        show: true,
+        position: 'bottom',            // move legend to bottom :contentReference[oaicite:0]{index=0}
+        horizontalAlign: 'center',
+      },
+      plotOptions: {
+        pie: {
+          donut: {
+            labels: {
+              show: true,                // show donut labels
+              name: {
+                show: true,              // show the name (“Pending”, etc.)
+                fontSize: '16px',
+                color: '#000',
+                formatter: (val) => val, // just the label name
+              },
+              value: {
+                show: true,              // show the value number
+                fontSize: '16px',
+                color: '#000',
+                formatter: (val) => val, // show raw value, not percentage :contentReference[oaicite:1]{index=1}
+              },
+              total: {
+                show: true,
+                label: 'Total',
+                formatter: (w) => {
+                  // w.globals.seriesTotals gives sum of series
+                  return w.globals.seriesTotals.reduce((a, b) => a + b, 0)
+                }
+              }
+            }
+          }
+        }
+      },
+      dataLabels: {
+        enabled: true,
+        formatter: (val, opts) => {
+          // opts.w.config.series gives the raw series value for that index
+          const rawValue = opts.w.config.series[opts.seriesIndex];
+          return rawValue; // display raw value instead of percentage :contentReference[oaicite:2]{index=2}
+        }
+      },
       responsive: [
         {
           breakpoint: 480,
           options: {
-            chart: { width: 300 },
-            legend: { position: "bottom" },
-          },
-        },
+            chart: { width: 200 },
+            legend: { position: 'bottom' }
+          }
+        }
       ],
       title: {
-        text: "Fruit Sales Distribution",
-        align: "center",
+        text: "Project Performance",
         style: { fontSize: "18px", fontWeight: "bold" },
       },
+    }
+  });
+  const [empPerformance] = useState({
+    series: [
+      {
+        name: "Pending Tasks",
+        data: [2, 1, 1, 1], // Anany, Yash, Tushar, Krishna
+      },
+      {
+        name: "Completed Tasks",
+        data: [5, 6, 2, 3],
+      },
+    ],
+    options: {
+      chart: {
+        type: "bar",
+        height: 350,
+      },
+
+      plotOptions: {
+        bar: {
+          borderRadius: 6,
+          columnWidth: "45%",
+        },
+      },
+
+      dataLabels: {
+        enabled: true,
+        formatter: (val) => val, // Only number, no %
+      },
+
+      xaxis: {
+        categories: ["Anany", "Yash", "Tushar", "Krishna"],
+      },
+
+      yaxis: {
+        title: {
+          text: "Tasks",
+        },
+      },
+
       legend: {
-        position: "right",
-        offsetY: 0,
-        height: 230,
+        position: "bottom",
+      },
+
+      title: {
+        text: "Employee Performance (Pending vs Completed)",
+        align: "center",
+        style: { fontSize: "18px", fontWeight: "bold" },
       },
     },
   });
@@ -57,10 +143,28 @@ function Dashboard() {
       <div className="flex-1 p-8 bg-gray-200 flex flex-col">
         <h1 className="text-2xl font-semibold mb-6">Dashboard</h1>
         <div className="bg-white w-full flex-1 rounded-3xl p-6 overflow-auto relative">
-          <div className="grid grid-cols-2 grid-rows-2 h-screen w-full gap-4 p-4">
+          <div className="grid grid-cols-2 grid-rows-2 h-screen w-full gap-6 p-4">
+
+
+            {/* Box 3 - Bottom Left */}
+            <div className="bg-gray-50 rounded-2xl shadow flex flex-col p-2 items-center pt-4 ">
+              <ReactApexChart options={chartData.options} series={chartData.series} type="donut" width="450" />
+
+            </div>
+
+            {/* Box 4 - Bottom Right */}
+            <div className="bg-gray-50 rounded-2xl shadow flex flex-col items-center p-4">
+              <Chart
+                options={empPerformance.options}
+                series={empPerformance.series}
+                type="bar"
+                width="500"
+              />
+            </div>
+
 
             {/* Box 1 - Top Left */}
-            <div className="bg-gray-50 rounded-2xl shadow flex flex-col p-2">
+            <div className="bg-gray-50 rounded-2xl shadow flex flex-col p-3">
               <h1>Task Status</h1>
               <TextField
                 type="text"
@@ -76,24 +180,57 @@ function Dashboard() {
                 <Table>
                   <TableHead>
                     <TableRow className="text-secondary bg-blue-400 px-6 py-4 text-md font-semibold shadow dark:bg-black dark:bg-opacity-5 md:px-8">
-                      <TableCell><b>ID</b></TableCell>
                       <TableCell><b>Name</b></TableCell>
+                      <TableCell><b>Status</b></TableCell>
+                      <TableCell><b>Priority</b></TableCell>
+                      <TableCell><b>Assigned To</b></TableCell>
+                      <TableCell><b>Created on</b></TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
 
                     <TableRow>
+                      <TableCell>Developer the docker file</TableCell>
+                      <TableCell>Pending</TableCell>
+                      <TableCell>High</TableCell>
                       <TableCell>Anany</TableCell>
-                      <TableCell>Anany12</TableCell>
+                      <TableCell>24-04-2025</TableCell>
                     </TableRow>
-
+                    <TableRow>
+                      <TableCell>Developer Backend</TableCell>
+                      <TableCell>Pending</TableCell>
+                      <TableCell>Low</TableCell>
+                      <TableCell>Yash</TableCell>
+                      <TableCell>24-05-2025</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Developer Readme file</TableCell>
+                      <TableCell>Pending</TableCell>
+                      <TableCell>medium</TableCell>
+                      <TableCell>Tushar</TableCell>
+                      <TableCell>24-07-2025</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Developer Github</TableCell>
+                      <TableCell>Pending</TableCell>
+                      <TableCell>High</TableCell>
+                      <TableCell>Krishna</TableCell>
+                      <TableCell>24-08-2025</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Developer Github</TableCell>
+                      <TableCell>Pending</TableCell>
+                      <TableCell>High</TableCell>
+                      <TableCell>Krishna</TableCell>
+                      <TableCell>24-08-2025</TableCell>
+                    </TableRow>
                   </TableBody>
                 </Table>
               </TableContainer>
             </div>
 
             {/* Box 2 - Top Right */}
-            <div className="bg-gray-50 rounded-2xl shadow flex flex-col p-2">
+            <div className="bg-gray-50 rounded-2xl shadow flex flex-col p-3">
               <h1>Employee Table</h1>
               <TextField
                 type="text"
@@ -109,35 +246,45 @@ function Dashboard() {
                 <Table>
                   <TableHead className="text-secondary  bg-blue-400 px-6 py-4 text-md font-semibold shadow dark:bg-black dark:bg-opacity-5 md:px-8">
                     <TableRow>
-                      <TableCell><b>ID</b></TableCell>
+                      <TableCell><b>Emp ID</b></TableCell>
                       <TableCell><b>Name</b></TableCell>
+                      <TableCell><b>Designation</b></TableCell>
+                      <TableCell><b>Pending Task</b></TableCell>
+                      <TableCell><b>Completed Task</b></TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
 
                     <TableRow>
+                      <TableCell>T001</TableCell>
                       <TableCell>Anany</TableCell>
-                      <TableCell>Anany12</TableCell>
+                      <TableCell>Softwar developer</TableCell>
+                      <TableCell>2</TableCell>
+                      <TableCell>5</TableCell>
+                    </TableRow><TableRow>
+                      <TableCell>T002</TableCell>
+                      <TableCell>Tushar</TableCell>
+                      <TableCell>Storage</TableCell>
+                      <TableCell>1</TableCell>
+                      <TableCell>6</TableCell>
+                    </TableRow><TableRow>
+                      <TableCell>T003</TableCell>
+                      <TableCell>Yash</TableCell>
+                      <TableCell>Product Manager</TableCell>
+                      <TableCell>1</TableCell>
+                      <TableCell>2</TableCell>
+                    </TableRow><TableRow>
+                      <TableCell>T004</TableCell>
+                      <TableCell>Krishna</TableCell>
+                      <TableCell>Softwar developer</TableCell>
+                      <TableCell>1</TableCell>
+                      <TableCell>3</TableCell>
                     </TableRow>
 
                   </TableBody>
                 </Table>
               </TableContainer>
             </div>
-
-            {/* Box 3 - Bottom Left */}
-            <div className="bg-gray-50 rounded-2xl shadow flex flex-col p-2">
-              <h1>Project Performance</h1>
-              <Chart options={chartData.options} series={chartData.series} type="pie" width="230" />
-              <Button variant="contained" className="mt-4">View Details</Button>
-            </div>
-
-            {/* Box 4 - Bottom Right */}
-            <div className="bg-gray-50 rounded-2xl shadow flex flex-col p-2">
-              <h1>Employee Performance</h1>
-              <Chart options={chartData.options} series={chartData.series} type="pie" width="230" />
-              <Button variant="contained" className="mt-4">View Details</Button>            </div>
-
           </div>
 
 

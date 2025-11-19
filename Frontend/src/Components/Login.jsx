@@ -21,7 +21,7 @@ function Login() {
 
             {/* Right Side Login Card */}
             <div className="flex items-center justify-center w-full md:w-1/2 p-6">
-                <div className="w-full h-[600px] max-w-[600px] bg-white shadow-lg rounded-3xl p-12 space-y-8 border ">
+                <div className="w-full h-[600px] max-w-[500px] bg-white shadow-lg rounded-3xl p-12 space-y-8 border ">
 
                     <h2 className="text-4xl font-bold text-center text-gray-800 mb-4">
                         Welcome Back
