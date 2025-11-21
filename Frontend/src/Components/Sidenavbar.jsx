@@ -12,7 +12,7 @@ function Sidenavbar() {
 
   return (
     <>
-      <div className='w-[250px] h-screen bg-white text-black p-4'>
+      <div className="w-[250px] h-screen bg-[#f2f2f2] text-black p-4">
 
         <div className='flex justify-center mb-6 mt-2'>
           <img
@@ -27,10 +27,10 @@ function Sidenavbar() {
           <p>ananytiwari415@gmail.com</p>
         </div>
 
-        <div className='flex justify-center mb-6'>
-          <ul className='space-y-8'>
-            <li className="mb-2 hovereringnavbar">
-              <a href="/dashboard" className="flex items-center gap-2  text-gray-800">
+        <div className='flex  justify-center mb-6'>
+          <ul className='space-y-8 bg-[#f2f2f2]'>
+            <li className="mb-2 bg-[#f2f2f2] hovereringnavbar">
+              <a href="/dashboard" className="flex items-center gap-2 bg-[#f2f2f2] text-gray-800">
                 <MdOutlineDashboardCustomize className="text-xl" />
                 <span>Dashboard</span>
               </a>

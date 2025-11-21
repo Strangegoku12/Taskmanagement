@@ -95,7 +95,7 @@ function Taskmanagement() {
     <div className="flex h-screen">
       <Sidenavbar />
 
-      <div className="flex-1 p-8 bg-gray-200 flex flex-col">
+      <div className="flex-1 p-8 bg-[#e2e8f0] flex flex-col">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold mb-4">Task Manager</h1>
           <Button variant="contained" color="primary" onClick={() => setOpen(true)}>

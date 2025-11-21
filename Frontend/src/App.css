@@ -1,11 +1,11 @@
 
 
 .hovereringnavbar{
-    background-color: rgb(255, 255, 255);
+    /* background-color: rgb(255, 255, 255); */
     padding:5px;
 }
 .hovereringnavbar:hover{
-    background-color: rgb(134, 176, 239);
+    /* background-color: rgb(134, 176, 239); */
 }
 
 .css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input {

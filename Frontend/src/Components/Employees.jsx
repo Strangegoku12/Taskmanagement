@@ -57,9 +57,9 @@ function Employees() {
       <div className="flex h-screen">
         <Sidenavbar />
 
-        <div className="flex-1 p-8 bg-gray-200 flex flex-col">
+        <div className="flex-1 p-8 bg-[#e2e8f0] flex flex-col">
           <div className="flex justify-between mb-2">
-            <h1>Employee Managemenet System</h1>
+            <h1 className="text-xl">Employee Managemenet System</h1>
             <Button variant="contained" color="primary" onClick={() => setOpen(true)}>Add Employee</Button>
           </div>
           <div className="bg-white w-full flex-1 rounded-3xl p-6 overflow-auto relative">

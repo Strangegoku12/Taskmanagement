@@ -25,7 +25,7 @@ function About() {
       <div className="flex h-screen">
         <Sidenavbar />
 
-        <div className="flex-1 p-8 bg-gray-200 flex flex-col">
+        <div className="flex-1 p-8 bg-[#eef2ff] flex flex-col">
           <div className="bg-white w-full flex-1 rounded-3xl p-6 overflow-auto relative">
             <div className="p-6 bg-white rounded-xl shadow-md space-y-6">
 

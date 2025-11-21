@@ -140,7 +140,7 @@ function Dashboard() {
     <div className="flex h-screen">
       <Sidenavbar />
 
-      <div className="flex-1 p-8 bg-gray-200 flex flex-col">
+      <div className="flex-1 p-8 bg-[#e2e8f0] flex flex-col">
         <h1 className="text-2xl font-semibold mb-6">Dashboard</h1>
         <div className="bg-white w-full flex-1 rounded-3xl p-6 overflow-auto relative">
           <div className="grid grid-cols-2 grid-rows-2 h-screen w-full gap-6 p-4">
