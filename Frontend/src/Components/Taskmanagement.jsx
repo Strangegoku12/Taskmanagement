@@ -167,7 +167,7 @@ function Taskmanagement() {
             sx={{
               position: "absolute",
               top: "50%",
-              left: "50%",
+              left: "51%",
               transform: "translate(-50%, -50%)",
               width: 450,
               bgcolor: "background.paper",
