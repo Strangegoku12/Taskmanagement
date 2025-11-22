@@ -149,6 +149,15 @@ function Employees() {
                 </Table>
               </TableContainer>
             </div>
+                <Stack
+                        spacing={2}
+                        className="absolute bottom-10 right-[500px]"
+                      >
+                        <Pagination
+                        variant="outlined" shape="rounded"
+                     
+                        />
+                      </Stack>
 
 
           </div>

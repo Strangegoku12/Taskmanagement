@@ -177,14 +177,14 @@ function Dashboard() {
                 className="w-[200px] mb-4"
               />
               <TableContainer component={Paper} className="mt-4">
-                <Table>
+                <Table stickyHeader>
                   <TableHead>
                     <TableRow className="text-secondary bg-blue-400 px-6 py-4 text-md font-semibold shadow dark:bg-black dark:bg-opacity-5 md:px-8">
                       <TableCell><b>Name</b></TableCell>
                       <TableCell><b>Status</b></TableCell>
                       <TableCell><b>Priority</b></TableCell>
-                      <TableCell><b>Assigned To</b></TableCell>
-                      <TableCell><b>Created on</b></TableCell>
+                      <TableCell className="whitespace-nowrap"><b>Assigned To</b></TableCell>
+                      <TableCell className="whitespace-nowrap"><b>Created on</b></TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -243,14 +243,18 @@ function Dashboard() {
                 className="w-[200px] mb-4"
               />
               <TableContainer component={Paper} className="mt-4">
-                <Table>
+                <Table stickyHeader>
                   <TableHead className="text-secondary  bg-blue-400 px-6 py-4 text-md font-semibold shadow dark:bg-black dark:bg-opacity-5 md:px-8">
                     <TableRow>
-                      <TableCell><b>Emp ID</b></TableCell>
-                      <TableCell><b>Name</b></TableCell>
-                      <TableCell><b>Designation</b></TableCell>
-                      <TableCell><b>Pending Task</b></TableCell>
-                      <TableCell><b>Completed Task</b></TableCell>
+                      <TableCell className="bg-blue-400 text-white"><b>Name</b></TableCell>
+                      <TableCell className="bg-blue-400 text-white"><b>Status</b></TableCell>
+                      <TableCell className="bg-blue-400 text-white"><b>Priority</b></TableCell>
+                      <TableCell className="bg-blue-400 text-white whitespace-nowrap">
+                        <b>Assigned To</b>
+                      </TableCell>
+                      <TableCell className="bg-blue-400 text-white whitespace-nowrap">
+                        <b>Created on</b>
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
