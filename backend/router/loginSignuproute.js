@@ -1,38 +1,76 @@
 const express = require("express");
 const router = express.Router();
-const loginSchema=require('../model/loginModel')
-const signupSchema=require('../model/signupModel')
+const signupSchema = require('../model/signupModel');
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const Employment = require("../model/employeesModel");
 
 
-router.post('/signup',async(req,res)=>{
-    const alreadyuser=await signupSchema.findOne(req.body.email)
-    if(alreadyuser){
-       return res.status(400).json({message:"Already Email is presented"})
+const JWT_SECRET = "123456789";
+
+// SIGNUP
+router.post('/signup', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        const alreadyUser = await signupSchema.findOne({ email });
+        if (alreadyUser) {
+            return res.status(400).json({ message: "Email already exists" });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newUser = new signupSchema({
+            email,
+            password: hashedPassword
+        });
+
+        await newUser.save();
+
+        return res.status(201).json({ message: "User registered successfully" });
+    } catch (err) {
+        console.error('Error:', err);
+        return res.status(500).json({ message: 'Server error' });
     }
+});
 
-    try{
-    const {email,password}=req.body
-    const hashedpassword=bcrypt.hash(password,10)
-    const newuser=new signupSchema({
-        email,
-        password:hashedpassword
-    })
-      await newuser.save()
-      return res.status(201).json({message:"Signed up user"})
-    }catch(err){
-       console.error('Error:', err);
-       return  res.status(500).json({ message: 'Server error' });
+// LOGIN
+router.post('/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        const user = await signupSchema.findOne({ email });
+        if (!user) {
+            return res.status(400).json({ message: "Invalid email or password" });
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ message: "Invalid email or password" });
+        }
+
+        const payload = {
+            id: user._id,
+            email: user.email,
+            role: user.role
+        };
+
+        const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
+
+        res.status(200).json({
+            message: "Login successful",
+            token,
+            user: {
+                id: user._id,
+                email: user.email,
+                role: user.role
+            }
+        });
+
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: 'Server error' });
     }
-})
+});
 
-router.post('/login',(req,res)=>{
-    try{
-        const{email,password}=req.body
-
-    }catch(err){
-
-    }
-})
-
-module.exports=router;
+module.exports = router;
