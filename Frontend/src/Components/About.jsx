@@ -1,12 +1,14 @@
 import Sidenavbar from "./Sidenavbar"
 import '../App.css'
-
+import {  useEffect } from "react";
+import axios from "axios";
 import {
   IconButton,
   Button,
   TextField,
   Table,
   TableBody,
+    Avatar,
   TableCell,
   TableContainer,
   TableHead,
@@ -22,17 +24,31 @@ import { useState } from "react";
 
 function About() {
   const [employeedetails,setEmployeedetails]=useState({
-    employeeid:"T001",
-    fullname:"Anany Tewari",
-    date_of_birth:"24/04/2025",
-    gender:"Male",
-    phone_number:"8303952900",
-    email_id:"ananytiwari415@gmail.com",
-    department:"Information Technology",
-    designation:"Software Developer",
-    date_of_joining:"20/05/2025",
-    resporting_manager:"Anany"
+    image: '',
+    employeeid:"",
+    fullname:"",
+    date_of_birth:"",
+    gender:"",
+    phone_number:"",
+    emailid:"",
+    department:"",
+    designation:"",
+    date_of_joining:"",
+    reportingmanager:""
   })
+    // FETCH ALL EMPLOYEES
+    async function getallemployeesdata() {
+      try {
+        const response = await axios.get("http://localhost:4000/getemployees");
+        setEmployeedetails(response.data.employees[1]);
+      } catch (error) {
+        console.log(error);
+      }
+    } 
+  
+    useEffect(() => {
+      getallemployeesdata();
+    }, []);
   return (
     <>
       <div className="flex h-screen">
@@ -64,11 +80,8 @@ function About() {
 
                 <div className="w-[200px] flex justify-end mt-16">
                   <div className="w-[200px] h-[200px] border-4 border-indigo-600 rounded-full  overflow-hidden bg-gray-100 shrink-0">
-                    <img
-                      src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                      alt="Profile"
-                      className="w-full h-full object-cover"
-                    />
+                  <Avatar src={`http://localhost:4000/uploads/${employeedetails.profileimage}`} sx={{ width: 200, height: 200 }} />
+
                   </div>
                 </div>
 
@@ -89,7 +102,7 @@ function About() {
 
                 <div>
                   <label className="font-medium">Email ID:</label>
-                  <TextField fullWidth InputProps={{ readOnly: true }} size="small" value={employeedetails.email_id} placeholder="Email ID" />
+                  <TextField fullWidth InputProps={{ readOnly: true }} size="small" value={employeedetails.emailid} placeholder="Email ID" />
                 </div>
 
                 <div>
@@ -109,7 +122,7 @@ function About() {
 
                 <div>
                   <label className="font-medium">Reporting Manager:</label>
-                  <TextField fullWidth InputProps={{ readOnly: true }} size="small" value={employeedetails.resporting_manager} placeholder="Manager Name" />
+                  <TextField fullWidth InputProps={{ readOnly: true }} size="small" value={employeedetails.reportingmanager} placeholder="Manager Name" />
                 </div>
 
               </div>

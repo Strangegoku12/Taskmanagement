@@ -1,5 +1,5 @@
-import Sidenavbar from "./Sidenavbar"
-import '../App.css'
+import Sidenavbar from "./Sidenavbar";
+import '../App.css';
 import {
   IconButton,
   Button,
@@ -17,12 +17,13 @@ import {
   Pagination,
   Stack
 } from '@mui/material';
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 function Employees() {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
   const [image, setImage] = useState(null);
+  const [getallemployees, setAllemployees] = useState([]);
   const [employeeform, setemployeeForm] = useState({
     image: '',
     empid: '',
@@ -34,238 +35,184 @@ function Employees() {
     department: '',
     designation: '',
     date_of_joining: '',
-    reporting_manager: ''
-  })
+    reporting_manager: '',
+    password: '',
+    salary: ''
+  });
 
   function handleformchange(e) {
-    const { name, value } = e.target
-    setemployeeForm((prev) => ({ ...prev, [name]: value }))
-
+    const { name, value } = e.target;
+    setemployeeForm((prev) => ({ ...prev, [name]: value }));
   }
 
-  function handlesubmitemployeeform(e) {
+  // FETCH ALL EMPLOYEES
+  async function getallemployeesdata() {
+    try {
+      const response = await axios.get("http://localhost:4000/getemployees");
+      setAllemployees(response.data.employees);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    getallemployeesdata();
+  }, []);
+
+  // SUBMIT EMPLOYEE FORM
+  async function handlesubmitemployeeform(e) {
     e.preventDefault();
 
-    console.log("show the employeeform", employeeform)
+    const formData = new FormData();
+    formData.append("profileimage", employeeform.image);
+    formData.append("employeeid", employeeform.empid);
+    formData.append("fullname", employeeform.fullname);
+    formData.append("date_of_birth", employeeform.date_of_birth);
+    formData.append("gender", employeeform.gender);
+    formData.append("phone_number", employeeform.phone_number);
+    formData.append("emailid", employeeform.email_id);
+    formData.append("department", employeeform.department);
+    formData.append("designation", employeeform.designation);
+    formData.append("date_of_joining", employeeform.date_of_joining);
+    formData.append("reportingmanager", employeeform.reporting_manager);
+    formData.append("salary", employeeform.salary);
+    formData.append("password", employeeform.password);
+    formData.append("role", "employee");
+
+    try {
+      const response = await axios.post("http://localhost:4000/addemployee", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      if (response.status === 201) {
+        alert("Employee added successfully!");
+        setOpen(false);
+        getallemployeesdata(); // refresh table
+      }
+    } catch (error) {
+      console.log(error);
+      alert("Internal Server Error");
+    }
   }
 
   const handleImage = (e) => {
-    setImage(URL.createObjectURL(e.target.files[0]));
+    const file = e.target.files[0];
+    setImage(URL.createObjectURL(file));   // preview image
+    setemployeeForm((prev) => ({ ...prev, image: file }));  // actual file
   };
+  async function deleteemployees(id) {
+    if (!window.confirm("Are you sure you want to delete this employee?")) return;
+
+    try {
+      const response = await axios.delete(`http://localhost:4000/deleteemployee/${id}`);
+
+      if (response.status === 200) {
+        getallemployeesdata();  // refresh table
+      }
+    } catch (error) {
+      console.log(error);
+      alert("Error deleting employee");
+    }
+  }
+
+
   return (
     <>
       <div className="flex h-screen">
         <Sidenavbar />
-
         <div className="flex-1 p-8 bg-[#e2e8f0] flex flex-col">
           <div className="flex justify-between mb-2">
-            <h1 className="text-xl">Employee Managemenet System</h1>
+            <h1 className="text-xl">Employee Management System</h1>
             <Button variant="contained" color="primary" onClick={() => setOpen(true)}>Add Employee</Button>
           </div>
+
           <div className="bg-white w-full flex-1 rounded-3xl p-6 overflow-auto relative">
-            <div>
+            <TableContainer component={Paper} className="mt-4">
+              <Table>
+                <TableHead>
+                  <TableRow className="bg-blue-400 text-md font-semibold">
+                    <TableCell>Image</TableCell>
+                    <TableCell>Emp ID</TableCell>
+                    <TableCell>Full Name</TableCell>
+                    <TableCell>Date Of Birth</TableCell>
+                    <TableCell>Gender</TableCell>
+                    <TableCell>Department</TableCell>
+                    <TableCell>Designation</TableCell>
+                    <TableCell>Date Of Joining</TableCell>
+                    <TableCell>Reporting Manager</TableCell>
+                    <TableCell>Action</TableCell>
+                  </TableRow>
+                </TableHead>
 
-              <TableContainer component={Paper} className="mt-4">
-                <Table>
-                  <TableHead>
-                    <TableRow className="text-secondary  bg-blue-400 px-6 py-4 text-md font-semibold shadow dark:bg-black dark:bg-opacity-5 md:px-8">
-                      <TableCell><b>Emp ID</b></TableCell>
-                      <TableCell><b>Full Name</b></TableCell>
-                      <TableCell><b>Date Of Birth</b></TableCell>
-                      <TableCell><b>Gender</b></TableCell>
-                      <TableCell><b>Department</b></TableCell>
-                      <TableCell><b>Designation</b></TableCell>
-                      <TableCell><b>Date Of Joining</b></TableCell>
-                      <TableCell><b>Reporting Manager</b></TableCell>
+                <TableBody>
+                  {getallemployees.map((emp, index) => (
+                    <TableRow key={index}>
+                      <TableCell>
+                        <Avatar src={`http://localhost:4000/uploads/${emp.profileimage}`} />
+                      </TableCell>
+                      <TableCell>{emp.employeeid}</TableCell>
+                      <TableCell>{emp.fullname}</TableCell>
+                      <TableCell>{emp.date_of_birth}</TableCell>
+                      <TableCell>{emp.gender}</TableCell>
+                      <TableCell>{emp.department}</TableCell>
+                      <TableCell>{emp.designation}</TableCell>
+                      <TableCell>{emp.date_of_joining}</TableCell>
+                      <TableCell>{emp.reportingmanager}</TableCell>
+                      <Button variant="contained" color="error" onClick={() => deleteemployees(emp._id)}>
+                        Delete
+                      </Button>
                     </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell>EMP001</TableCell>
-                      <TableCell>Anany Tewari</TableCell>
-                      <TableCell>12-02-2000</TableCell>
-                      <TableCell>Male</TableCell>
-                      <TableCell>Engineering</TableCell>
-                      <TableCell>Software Developer</TableCell>
-                      <TableCell>20-01-2024</TableCell>
-                      <TableCell>Rohan Verma</TableCell>
-                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
 
-                    <TableRow>
-                      <TableCell>EMP002</TableCell>
-                      <TableCell>Yash Gupta</TableCell>
-                      <TableCell>18-07-1999</TableCell>
-                      <TableCell>Male</TableCell>
-                      <TableCell>Engineering</TableCell>
-                      <TableCell>Backend Developer</TableCell>
-                      <TableCell>14-03-2023</TableCell>
-                      <TableCell>Rohan Verma</TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                      <TableCell>EMP003</TableCell>
-                      <TableCell>Tushar Singh</TableCell>
-                      <TableCell>05-11-1998</TableCell>
-                      <TableCell>Male</TableCell>
-                      <TableCell>Design</TableCell>
-                      <TableCell>UI/UX Designer</TableCell>
-                      <TableCell>10-09-2022</TableCell>
-                      <TableCell>Anjali Sharma</TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                      <TableCell>EMP004</TableCell>
-                      <TableCell>Krishna Patel</TableCell>
-                      <TableCell>22-03-1997</TableCell>
-                      <TableCell>Male</TableCell>
-                      <TableCell>Engineering</TableCell>
-                      <TableCell>DevOps Engineer</TableCell>
-                      <TableCell>05-01-2021</TableCell>
-                      <TableCell>Rohan Verma</TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                      <TableCell>EMP005</TableCell>
-                      <TableCell>Anjali Sharma</TableCell>
-                      <TableCell>14-09-1995</TableCell>
-                      <TableCell>Female</TableCell>
-                      <TableCell>HR</TableCell>
-                      <TableCell>HR Manager</TableCell>
-                      <TableCell>12-06-2019</TableCell>
-                      <TableCell>Deepak Ahuja</TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                      <TableCell>EMP006</TableCell>
-                      <TableCell>Riya Mehta</TableCell>
-                      <TableCell>03-08-1996</TableCell>
-                      <TableCell>Female</TableCell>
-                      <TableCell>Finance</TableCell>
-                      <TableCell>Accountant</TableCell>
-                      <TableCell>01-04-2020</TableCell>
-                      <TableCell>Neha Kapoor</TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </div>
-                <Stack
-                        spacing={2}
-                        className="absolute bottom-10 right-[500px]"
-                      >
-                        <Pagination
-                        variant="outlined" shape="rounded"
-                     
-                        />
-                      </Stack>
-
-
+            <Stack spacing={2} className="absolute bottom-10 right-[500px]">
+              <Pagination variant="outlined" shape="rounded" />
+            </Stack>
           </div>
         </div>
       </div>
 
-
+      {/* MODAL */}
       <Modal open={open} onClose={() => setOpen(false)}>
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: 600,
-            bgcolor: 'background.paper',
-            boxShadow: 24,
-            p: 4,
-            borderRadius: 3,
-            zIndex: 10,
-            maxHeight: '90vh',
-            overflowY: 'auto',
-          }}
-        >
-          <div className="flex justify-between">
-            <h2 className="text-xl font-bold mb-4 text-center">Add New Employee</h2>
-
-          </div>
-
-          {/* <div className="h-[500px] overflow-auto p-4 bg-white rounded-xl shadow-md"> */}
+        <Box sx={{
+          position: 'absolute', top: '50%', left: '50%',
+          transform: 'translate(-50%, -50%)', width: 600,
+          bgcolor: 'background.paper', boxShadow: 24, p: 4, borderRadius: 3,
+          maxHeight: '90vh', overflowY: 'auto'
+        }}>
+          <h2 className="text-xl font-bold mb-4 text-center">Add New Employee</h2>
 
           <form onSubmit={handlesubmitemployeeform} className="space-y-4">
-            <div className="flex  flex-col items-center space-y-3">
+            <div className="flex flex-col items-center space-y-3">
               <Avatar src={image} sx={{ width: 80, height: 80 }} />
 
               <Button variant="contained" component="label">
                 Upload Image
-                <input
-                  type="file"
-                  accept="image/*"
-                  hidden
-                  name="image"
-                  value={employeeform.image}
-                  onChange={handleImage}
-                />
+                <input type="file" hidden accept="image/*" name="image" onChange={handleImage} />
               </Button>
             </div>
-            <div>
-              <label className="font-medium">Employee ID:</label>
-              <TextField fullWidth name="empid" value={employeeform.empid} size="small" onChange={handleformchange} placeholder="Enter Employee ID" />
-            </div>
 
-            <div>
-              <label className="font-medium">Full Name:</label>
-              <TextField fullWidth name="fullname" value={employeeform.fullname} size="small" onChange={handleformchange} placeholder="Enter Full Name" />
-            </div>
+            <TextField fullWidth name="empid" label="Employee ID" size="small" onChange={handleformchange} />
+            <TextField fullWidth name="fullname" label="Full Name" size="small" onChange={handleformchange} />
+            <TextField fullWidth type="date" name="date_of_birth" size="small" onChange={handleformchange} />
+            <TextField fullWidth name="gender" label="Gender" size="small" onChange={handleformchange} />
+            <TextField fullWidth name="phone_number" label="Phone Number" size="small" onChange={handleformchange} />
+            <TextField fullWidth name="email_id" label="Email ID" size="small" onChange={handleformchange} />
+            <TextField fullWidth name="department" label="Department" size="small" onChange={handleformchange} />
+            <TextField fullWidth name="designation" label="Designation" size="small" onChange={handleformchange} />
+            <TextField fullWidth type="date" name="date_of_joining" size="small" onChange={handleformchange} />
+            <TextField fullWidth name="reporting_manager" label="Reporting Manager" size="small" onChange={handleformchange} />
+            <TextField fullWidth name="salary" label="Salary" size="small" onChange={handleformchange} />
+            <TextField fullWidth name="password" label="Password" size="small" onChange={handleformchange} />
 
-            <div>
-              <label className="font-medium">Date of Birth:</label>
-              <TextField fullWidth value={employeeform.date_of_birth} name="date_of_birth" size="small" onChange={handleformchange} placeholder="DD/MM/YYYY" />
-            </div>
-
-            <div>
-              <label className="font-medium">Gender:</label>
-              <TextField fullWidth name="gender" value={employeeform.gender} size="small" onChange={handleformchange} placeholder="Gender" />
-            </div>
-
-            <div>
-              <label className="font-medium">Phone Number:</label>
-              <TextField fullWidth size="small" onChange={handleformchange} value={employeeform.phone_number} name="phone_number" placeholder="Phone Number" />
-            </div>
-
-            <div>
-              <label className="font-medium">Email ID:</label>
-              <TextField fullWidth size="small" onChange={handleformchange} name="email_id" value={employeeform.email_id} placeholder="Email ID" />
-            </div>
-
-            <div>
-              <label className="font-medium">Department:</label>
-              <TextField fullWidth size="small" onChange={handleformchange} value={employeeform.department} name="department" placeholder="Department" />
-            </div>
-
-            <div>
-              <label className="font-medium">Designation:</label>
-              <TextField fullWidth size="small" onChange={handleformchange} value={employeeform.designation} name="designation" placeholder="Designation" />
-            </div>
-
-            <div>
-              <label className="font-medium">Date of Joining:</label>
-              <TextField fullWidth size="small" onChange={handleformchange} value={employeeform.date_of_joining} name="date_of_joining" placeholder="DD/MM/YYYY" />
-            </div>
-
-            <div>
-              <label className="font-medium">Reporting Manager:</label>
-              <TextField fullWidth size="small" onChange={handleformchange} name="reporting_manager" value={employeeform.reporting_manager} placeholder="Manager Name" />
-            </div>
-
-
-
-            <Button type="submit" variant="contained" size="medium" color="primary">Save</Button>
-
+            <Button type="submit" variant="contained">Save</Button>
           </form>
-          {/* </div> */}
-
         </Box>
       </Modal>
     </>
-  )
+  );
 }
 
-export default Employees
+export default Employees;
