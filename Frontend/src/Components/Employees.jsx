@@ -132,14 +132,14 @@ function Employees() {
                 <TableHead>
                   <TableRow className="bg-blue-400 text-md font-semibold">
                     <TableCell>Image</TableCell>
-                    <TableCell>Emp ID</TableCell>
-                    <TableCell>Full Name</TableCell>
-                    <TableCell>Date Of Birth</TableCell>
+                    <TableCell className="whitespace-nowrap">Emp ID</TableCell>
+                    <TableCell className="whitespace-nowrap">Full Name</TableCell>
+                    <TableCell className="whitespace-nowrap">Date Of Birth</TableCell>
                     <TableCell>Gender</TableCell>
                     <TableCell>Department</TableCell>
                     <TableCell>Designation</TableCell>
-                    <TableCell>Date Of Joining</TableCell>
-                    <TableCell>Reporting Manager</TableCell>
+                    <TableCell className="whitespace-nowrap">Date Of Joining</TableCell>
+                    <TableCell className="whitespace-nowrap">Reporting Manager</TableCell>
                     <TableCell>Action</TableCell>
                   </TableRow>
                 </TableHead>
@@ -158,9 +158,11 @@ function Employees() {
                       <TableCell>{emp.designation}</TableCell>
                       <TableCell>{emp.date_of_joining}</TableCell>
                       <TableCell>{emp.reportingmanager}</TableCell>
-                      <Button variant="contained" color="error" onClick={() => deleteemployees(emp._id)}>
-                        Delete
-                      </Button>
+                      <TableCell align="center">
+                        <Button variant="contained" color="error" onClick={() => deleteemployees(emp._id)}>
+                          Delete
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

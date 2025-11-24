@@ -21,8 +21,11 @@ function Login() {
             console.log("Login Response:", response);
 
             if (response.status === 200) {
+                localStorage.setItem("token", response.data.token);  // store token
+                localStorage.setItem("role", response.data.user.role); // if backend sends role separately
                 navigate("/dashboard");
-            } else {
+            }
+            else {
                 alert(response.message || "Login failed");
             }
         } catch (err) {
@@ -96,7 +99,7 @@ function Login() {
                             </div>
                         </div>
 
-                        <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-2xl shadow-md transition" onClick={logindashboard}>
+                        <button type="submit" className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-2xl shadow-md transition" onClick={logindashboard}>
                             Login
                         </button>
                     </form>

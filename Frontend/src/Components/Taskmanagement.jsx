@@ -143,11 +143,11 @@ function Taskmanagement() {
               <TableHead>
                 <TableRow className="bg-blue-400 text-md font-semibold">
                   <TableCell><b>Name</b></TableCell>
-                  <TableCell><b>Task Title</b></TableCell>
+                  <TableCell className="whitespace-nowrap"><b>Task Title</b></TableCell>
                   <TableCell><b>Status</b></TableCell>
-                  <TableCell><b>Total Time</b></TableCell>
-                  <TableCell><b>Created By</b></TableCell>
-                  <TableCell><b>Created At</b></TableCell>
+                  <TableCell className="whitespace-nowrap"><b>Total Time</b></TableCell>
+                  <TableCell className="whitespace-nowrap"><b>Created By</b></TableCell>
+                  <TableCell className="whitespace-nowrap"><b>Created At</b></TableCell>
                   <TableCell><b>Action</b></TableCell>
                 </TableRow>
               </TableHead>
@@ -161,9 +161,11 @@ function Taskmanagement() {
                     <TableCell>{row.totaltime}</TableCell>
                     <TableCell>{row.createdby}</TableCell>
                     <TableCell>{row.createdAt.substring(0, 10)}</TableCell>
-                    <Button variant="contained" color="error" onClick={() => deletetask(row._id)}>
+                    <TableCell align="center">
+                    <Button  variant="contained" color="error" onClick={() => deletetask(row._id)}>
                       Delete
                     </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
