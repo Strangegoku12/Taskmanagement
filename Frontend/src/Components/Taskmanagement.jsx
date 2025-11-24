@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidenavbar from './Sidenavbar';
+import axios from "axios";
 import {
   IconButton,
   Button,
@@ -19,29 +20,35 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 
 function Taskmanagement() {
-  const [rows, setRows] = useState([
-    { id: 1, name: 'John', title: 'Fix Login Bug', status: 'Pending', totaltime: '2h', createdby: 'Admin', createdat: '2025-11-10' },
-    { id: 2, name: 'Sara', title: 'Add Profile Page', status: 'In Progress', totaltime: '4h', createdby: 'Manager', createdat: '2025-11-08' },
-    { id: 3, name: 'Mike', title: 'Deploy Backend', status: 'Completed', totaltime: '3h', createdby: 'Admin', createdat: '2025-11-05' },
-    { id: 4, name: 'Emma', title: 'Design Landing Page', status: 'Pending', totaltime: '5h', createdby: 'Designer', createdat: '2025-11-06' },
-    { id: 5, name: 'Alex', title: 'Fix Navbar Issue', status: 'Completed', totaltime: '2h', createdby: 'Admin', createdat: '2025-11-03' },
-    { id: 6, name: 'Liam', title: 'Integrate API', status: 'In Progress', totaltime: '6h', createdby: 'Developer', createdat: '2025-11-04' },
-  ]);
-
+  const [rows, setRows] = useState([]);
   const [searched, setSearch] = useState({ searchvalue: '' });
   const [open, setOpen] = useState(false);
+
   const [formData, setFormData] = useState({
-    id: '',
-    name: '',
-    title: '',
-    status: '',
-    totaltime: '',
-    createdby: '',
+    name: "",
+    tasktitle: "",
+    status: "",
+    totaltime: "",
+    createdby: "",
   });
 
   // Pagination
   const [page, setPage] = useState(1);
   const [rowsPerPage] = useState(5);
+
+  // Fetch tasks from backend
+  const fetchTasks = async () => {
+    try {
+      const response = await axios.get("http://localhost:4000/gettask");
+      setRows(response.data.task);
+    } catch (error) {
+      console.error("Error fetching tasks", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
 
   const handlechange = (e) => {
     const { name, value } = e.target;
@@ -52,11 +59,10 @@ function Taskmanagement() {
   // Search filters
   const filteredRows = rows.filter(
     (row) =>
-      row.title.toLowerCase().includes(searched.searchvalue.toLowerCase()) ||
+      row.tasktitle.toLowerCase().includes(searched.searchvalue.toLowerCase()) ||
       row.status.toLowerCase().includes(searched.searchvalue.toLowerCase()) ||
       row.name.toLowerCase().includes(searched.searchvalue.toLowerCase()) ||
-      row.createdby.toLowerCase().includes(searched.searchvalue.toLowerCase()) ||
-      row.id.toString().includes(searched.searchvalue)
+      row.createdby.toLowerCase().includes(searched.searchvalue.toLowerCase())
   );
 
   const startIndex = (page - 1) * rowsPerPage;
@@ -67,29 +73,45 @@ function Taskmanagement() {
     setPage(value);
   };
 
+  // Form change
   const handleFormChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  // Submit Add Task Form
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const newTask = {
-      ...formData,
-      id: rows.length + 1,
-      createdat: new Date().toISOString().split('T')[0],
-    };
-    setRows((prev) => [...prev, newTask]);
-    setOpen(false);
-    setFormData({
-      id: '',
-      name: '',
-      title: '',
-      status: '',
-      totaltime: '',
-      createdby: '',
-    });
+    try {
+      await axios.post("http://localhost:4000/addtask", formData);
+      fetchTasks();  // Refresh table
+      setOpen(false);
+      setFormData({
+        name: "",
+        tasktitle: "",
+        status: "",
+        totaltime: "",
+        createdby: "",
+      });
+    } catch (error) {
+      console.error("Error adding a task", error);
+    }
   };
+  async function deletetask(id) {
+    if (!window.confirm("Are you sure you want to delete this task?")) return;
+
+    try {
+      const response = await axios.delete(`http://localhost:4000/deletetask/${id}`);
+
+      if (response.status === 200) {
+        fetchTasks();  // refresh table
+      }
+    } catch (error) {
+      console.log(error);
+      alert("Error deleting employee");
+    }
+  }
+
 
   return (
     <div className="flex h-screen">
@@ -119,40 +141,39 @@ function Taskmanagement() {
           <TableContainer component={Paper} className="mt-4">
             <Table>
               <TableHead>
-                <TableRow className="text-secondary bg-blue-400 px-6 py-4 text-md font-semibold shadow dark:bg-black dark:bg-opacity-5 md:px-8">
-                  <TableCell><b>ID</b></TableCell>
+                <TableRow className="bg-blue-400 text-md font-semibold">
                   <TableCell><b>Name</b></TableCell>
                   <TableCell><b>Task Title</b></TableCell>
                   <TableCell><b>Status</b></TableCell>
                   <TableCell><b>Total Time</b></TableCell>
                   <TableCell><b>Created By</b></TableCell>
                   <TableCell><b>Created At</b></TableCell>
+                  <TableCell><b>Action</b></TableCell>
                 </TableRow>
               </TableHead>
 
               <TableBody>
                 {paginatedRows.map((row) => (
-                  <TableRow key={row.id}>
-                    <TableCell>{row.id}</TableCell>
+                  <TableRow key={row._id}>
                     <TableCell>{row.name}</TableCell>
-                    <TableCell>{row.title}</TableCell>
+                    <TableCell>{row.tasktitle}</TableCell>
                     <TableCell>{row.status}</TableCell>
                     <TableCell>{row.totaltime}</TableCell>
                     <TableCell>{row.createdby}</TableCell>
-                    <TableCell>{row.createdat}</TableCell>
+                    <TableCell>{row.createdAt.substring(0, 10)}</TableCell>
+                    <Button variant="contained" color="error" onClick={() => deletetask(row._id)}>
+                      Delete
+                    </Button>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </TableContainer>
 
-          {/* Pagination at bottom */}
-          <Stack
-            spacing={2}
-            className="absolute bottom-10 right-[500px]"
-          >
+          <Stack spacing={2} className="absolute bottom-10 right-[500px]">
             <Pagination
-            variant="outlined" shape="rounded"
+              variant="outlined"
+              shape="rounded"
               count={Math.ceil(filteredRows.length / rowsPerPage)}
               page={page}
               onChange={handlePageChange}
@@ -162,6 +183,7 @@ function Taskmanagement() {
           </Stack>
         </div>
 
+        {/* Add Task Modal */}
         <Modal open={open} onClose={() => setOpen(false)}>
           <Box
             sx={{
@@ -185,16 +207,30 @@ function Taskmanagement() {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <TextField fullWidth label="Name" name="name" size="small" value={formData.name} onChange={handleFormChange} required />
-              <TextField fullWidth label="Task Title" name="title" size="small" value={formData.title} onChange={handleFormChange} required />
-              <TextField fullWidth label="Status" name="status" size="small" value={formData.status} onChange={handleFormChange} required />
-              <TextField fullWidth label="Total Time" name="totaltime" size="small" value={formData.totaltime} onChange={handleFormChange} />
-              <TextField fullWidth label="Created By" name="createdby" size="small" value={formData.createdby} onChange={handleFormChange} />
+              <TextField fullWidth label="Task Title" name="tasktitle" size="small" value={formData.tasktitle} onChange={handleFormChange} required />
+              <TextField
+                select
+                fullWidth
+                label="Status"
+                name="status"
+                size="small"
+                value={formData.status}
+                onChange={handleFormChange}
+                required
+              >
+                <option value="Pending">Pending</option>
+                <option value="Completed">Completed</option>
+                <option value="InProgress">InProgress</option>
+              </TextField>
+              <TextField fullWidth label="Total Time" name="totaltime" size="small" value={formData.totaltime} onChange={handleFormChange} required />
+              <TextField fullWidth label="Created By" name="createdby" size="small" value={formData.createdby} onChange={handleFormChange} required />
 
-              <Button fullWidth type="submit" variant="contained" color="success">Save Task</Button>
+              <Button fullWidth type="submit" variant="contained" color="success">
+                Save Task
+              </Button>
             </form>
           </Box>
         </Modal>
-
       </div>
     </div>
   );
