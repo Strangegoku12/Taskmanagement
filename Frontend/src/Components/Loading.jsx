@@ -87,7 +87,7 @@ function Loading() {
 
             {/* Right Column Inputs + Profile Circle */}
             <div className="space-y-6">
-              {/* Big Profile Image Skeletons */}
+              {/* Big Profile Image Skeleton */}
               <div className="flex justify-end">
         <Skeleton className="ml-12" variant="circular" width={100} height={100} />
               </div>
