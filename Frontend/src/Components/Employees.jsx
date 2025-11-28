@@ -31,7 +31,7 @@ function Employees() {
     date_of_birth: '',
     gender: '',
     phone_number: '',
-    email_id: '',
+    email: '',
     department: '',
     designation: '',
     date_of_joining: '',
@@ -70,7 +70,7 @@ function Employees() {
     formData.append("date_of_birth", employeeform.date_of_birth);
     formData.append("gender", employeeform.gender);
     formData.append("phone_number", employeeform.phone_number);
-    formData.append("emailid", employeeform.email_id);
+    formData.append("email", employeeform.email);
     formData.append("department", employeeform.department);
     formData.append("designation", employeeform.designation);
     formData.append("date_of_joining", employeeform.date_of_joining);
@@ -201,7 +201,7 @@ function Employees() {
             <TextField fullWidth type="date" name="date_of_birth" size="small" onChange={handleformchange} />
             <TextField fullWidth name="gender" label="Gender" size="small" onChange={handleformchange} />
             <TextField fullWidth name="phone_number" label="Phone Number" size="small" onChange={handleformchange} />
-            <TextField fullWidth name="email_id" label="Email ID" size="small" onChange={handleformchange} />
+            <TextField fullWidth name="email" label="Email ID" size="small" onChange={handleformchange} />
             <TextField fullWidth name="department" label="Department" size="small" onChange={handleformchange} />
             <TextField fullWidth name="designation" label="Designation" size="small" onChange={handleformchange} />
             <TextField fullWidth type="date" name="date_of_joining" size="small" onChange={handleformchange} />

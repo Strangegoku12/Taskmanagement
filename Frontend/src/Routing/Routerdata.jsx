@@ -19,7 +19,7 @@ function Routerdata() {
           <Route
             path="/employees"
             element={
-              <ProtectedRoute allowedRoles={["employee"]}>
+              <ProtectedRoute allowedRoles={["admin"]}>
                 <Employees />
               </ProtectedRoute>
             }

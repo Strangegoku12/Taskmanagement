@@ -30,22 +30,31 @@ function About() {
     date_of_birth:"",
     gender:"",
     phone_number:"",
-    emailid:"",
+    email:"",
     department:"",
     designation:"",
     date_of_joining:"",
     reportingmanager:""
   })
+
+
     // FETCH ALL EMPLOYEES
-    async function getallemployeesdata() {
-      try {
-        const response = await axios.get("http://localhost:4000/getemployees");
-        setEmployeedetails(response.data.employees[1]);
-      } catch (error) {
-        console.log(error);
-      }
-    } 
-  
+ async function getallemployeesdata() {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await axios.get("http://localhost:4000/about", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    setEmployeedetails(response.data.employeedata);
+  } catch (error) {
+    console.log("ERROR:", error);
+  }
+}
+
     useEffect(() => {
       getallemployeesdata();
     }, []);
@@ -102,7 +111,7 @@ function About() {
 
                 <div>
                   <label className="font-medium">Email ID:</label>
-                  <TextField fullWidth InputProps={{ readOnly: true }} size="small" value={employeedetails.emailid} placeholder="Email ID" />
+                  <TextField fullWidth InputProps={{ readOnly: true }} size="small" value={employeedetails.email} placeholder="Email ID" />
                 </div>
 
                 <div>
