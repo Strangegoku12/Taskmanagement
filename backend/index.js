@@ -4,7 +4,7 @@ const connectmongo = require("./router/connect");
 const loginsignup = require("./router/loginSignuproute");
 const employeesignup = require("./router/employeeroute");
 const taskroute = require("./router/taskroute");
-
+const about=require("./router/about")
 
 const cors = require("cors");
 
@@ -22,7 +22,7 @@ app.use("/",employeesignup)
 app.use("/",taskroute)
 
 app.use("/uploads", express.static("uploads"));
-
+app.use("/",about)
 
 app.get("/get", (req, res) => {
   res.send("Welcome to Task Management API");

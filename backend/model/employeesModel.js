@@ -29,7 +29,7 @@ const EmployementSchema = new mongoose.Schema({
         type:String,
         required:true,
     },
-    emailid:{
+    email:{
         type:String,
         required:true
     },
