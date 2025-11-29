@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route , Navigate  } from "react-router-dom";
 import Loading from "../Components/Loading";
 import ProtectedRoute from "../Components/Protectedroute";
 
@@ -14,6 +14,8 @@ function Routerdata() {
     <Router>
       <Suspense fallback={<Loading />}>
         <Routes>
+                    <Route path="/" element={<Navigate to="/login" replace />} />
+
           <Route path="/dashboard" element={<Dashboard />} />
 
           <Route

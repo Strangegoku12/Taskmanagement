@@ -39,7 +39,13 @@ function Taskmanagement() {
   // Fetch tasks from backend
   const fetchTasks = async () => {
     try {
-      const response = await axios.get("http://localhost:4000/gettask");
+          const token = localStorage.getItem("token");
+
+      const response = await axios.get("http://localhost:4000/gettask", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
       setRows(response.data.task);
     } catch (error) {
       console.error("Error fetching tasks", error);

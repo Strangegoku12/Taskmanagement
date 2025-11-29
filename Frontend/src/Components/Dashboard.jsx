@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidenavbar from "./Sidenavbar";
 import Chart from "react-apexcharts";
 import ReactApexChart from "react-apexcharts";
+import axios from "axios";
 
 import {
   IconButton,
@@ -136,6 +137,33 @@ function Dashboard() {
     },
   });
 
+  const [totaltask, setTotaltask] = useState([])
+    const [getallemployees, setAllemployees] = useState([]);
+
+
+  async function totaltaskapi() {
+    try {
+      const response = await axios.get("http://localhost:4000/gettask");
+      setTotaltask(response.data.task);
+    } catch (error) {
+      console.error("Error fetching tasks", error);
+    }
+  }
+
+   async function getallemployeesdata() {
+    try {
+      const response = await axios.get("http://localhost:4000/getemployees");
+      setAllemployees(response.data.employees);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    getallemployeesdata();
+    totaltaskapi()
+  }, []);
+
   return (
     <div className="flex h-screen">
       <Sidenavbar />
@@ -188,42 +216,19 @@ function Dashboard() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
+                    {totaltask.map((row) => (
+                      <TableRow key={row._id}>
+                        <TableCell>{row.name}</TableCell>
+                        <TableCell>{row.tasktitle}</TableCell>
+                        <TableCell>{row.status}</TableCell>
+                        <TableCell>{row.totaltime}</TableCell>
+                        <TableCell>{row.createdby}</TableCell>
+                        <TableCell>{row.createdAt.substring(0, 10)}</TableCell>
+                        <TableCell align="center">
 
-                    <TableRow>
-                      <TableCell>Developer the docker file</TableCell>
-                      <TableCell>Pending</TableCell>
-                      <TableCell>High</TableCell>
-                      <TableCell>Anany</TableCell>
-                      <TableCell>24-04-2025</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>Developer Backend</TableCell>
-                      <TableCell>Pending</TableCell>
-                      <TableCell>Low</TableCell>
-                      <TableCell>Yash</TableCell>
-                      <TableCell>24-05-2025</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>Developer Readme file</TableCell>
-                      <TableCell>Pending</TableCell>
-                      <TableCell>medium</TableCell>
-                      <TableCell>Tushar</TableCell>
-                      <TableCell>24-07-2025</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>Developer Github</TableCell>
-                      <TableCell>Pending</TableCell>
-                      <TableCell>High</TableCell>
-                      <TableCell>Krishna</TableCell>
-                      <TableCell>24-08-2025</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>Developer Github</TableCell>
-                      <TableCell>Pending</TableCell>
-                      <TableCell>High</TableCell>
-                      <TableCell>Krishna</TableCell>
-                      <TableCell>24-08-2025</TableCell>
-                    </TableRow>
+                        </TableCell>
+                      </TableRow>
+                    ))}
                   </TableBody>
                 </Table>
               </TableContainer>
@@ -246,46 +251,24 @@ function Dashboard() {
                 <Table stickyHeader>
                   <TableHead className="text-secondary  bg-blue-400 px-6 py-4 text-md font-semibold shadow dark:bg-black dark:bg-opacity-5 md:px-8">
                     <TableRow>
-                      <TableCell className="bg-blue-400 text-white"><b>Name</b></TableCell>
-                      <TableCell className="bg-blue-400 text-white"><b>Status</b></TableCell>
-                      <TableCell className="bg-blue-400 text-white"><b>Priority</b></TableCell>
+                      <TableCell className="bg-blue-400 text-white"><b>Empid</b></TableCell>
+                      <TableCell className="bg-blue-400 text-white"><b>Fullname</b></TableCell>
+                      <TableCell className="bg-blue-400 text-white"><b>Department</b></TableCell>
                       <TableCell className="bg-blue-400 text-white whitespace-nowrap">
-                        <b>Assigned To</b>
-                      </TableCell>
-                      <TableCell className="bg-blue-400 text-white whitespace-nowrap">
-                        <b>Created on</b>
+                        <b>Reportingmanager </b>
                       </TableCell>
                     </TableRow>
                   </TableHead>
-                  <TableBody>
-
-                    <TableRow>
-                      <TableCell>T001</TableCell>
-                      <TableCell>Anany</TableCell>
-                      <TableCell>Softwar developer</TableCell>
-                      <TableCell>2</TableCell>
-                      <TableCell>5</TableCell>
-                    </TableRow><TableRow>
-                      <TableCell>T002</TableCell>
-                      <TableCell>Tushar</TableCell>
-                      <TableCell>Storage</TableCell>
-                      <TableCell>1</TableCell>
-                      <TableCell>6</TableCell>
-                    </TableRow><TableRow>
-                      <TableCell>T003</TableCell>
-                      <TableCell>Yash</TableCell>
-                      <TableCell>Product Manager</TableCell>
-                      <TableCell>1</TableCell>
-                      <TableCell>2</TableCell>
-                    </TableRow><TableRow>
-                      <TableCell>T004</TableCell>
-                      <TableCell>Krishna</TableCell>
-                      <TableCell>Softwar developer</TableCell>
-                      <TableCell>1</TableCell>
-                      <TableCell>3</TableCell>
+                 <TableBody>
+                  {getallemployees.map((emp, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{emp.employeeid}</TableCell>
+                      <TableCell>{emp.fullname}</TableCell>
+                      <TableCell>{emp.department}</TableCell>
+                      <TableCell>{emp.reportingmanager}</TableCell>
                     </TableRow>
-
-                  </TableBody>
+                  ))}
+                </TableBody>
                 </Table>
               </TableContainer>
             </div>
