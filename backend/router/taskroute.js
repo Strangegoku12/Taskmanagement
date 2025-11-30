@@ -5,23 +5,17 @@ const Employment = require("../model/employeesModel");
 const authMiddleware = require("./auth");
 
 
-router.post("/addtask", async (req, res) => {
+router.post("/addtask", authMiddleware, async (req, res) => {
   try {
-    const {
-      name,
-      tasktitle,
-      status,
-      totaltime,
-      createdby
-    } = req.body;
-
+    const { name, tasktitle, status, totaltime, createdby } = req.body;
 
     const newtask = new taskModel({
       name,
       tasktitle,
       status,
       totaltime,
-      createdby
+      createdby,
+      userId: req.user.id,   
     });
 
     await newtask.save();
@@ -32,25 +26,27 @@ router.post("/addtask", async (req, res) => {
   }
 });
 
+
 // gettask
 router.get('/gettask', authMiddleware, async (req, res) => {
-
   try {
+
     if (req.user.role === 'admin') {
       const taskdetails = await taskModel.find();
-      res.status(200).json({ task: taskdetails });
-      return;
+      return res.status(200).json({ task: taskdetails });
     }
-    else {
-      const taskdetails = await taskModel.find({ _id: req.user.id });
-      res.status(200).json({ task: taskdetails });
-    }
+
+    // Employee → return ONLY tasks created by this employee
+    const taskdetails = await taskModel.find({ userId: req.user.id });
+
+    res.status(200).json({ task: taskdetails });
 
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Error fetching leaves' });
+    res.status(500).json({ message: 'Error fetching tasks' });
   }
 });
+
 
 router.delete("/deletetask/:id", async (req, res) => {
   try {
