@@ -143,7 +143,14 @@ function Dashboard() {
 
   async function totaltaskapi() {
     try {
-      const response = await axios.get("http://localhost:4000/gettask");
+       const token = localStorage.getItem("token");
+
+      const response = await axios.get("http://localhost:4000/gettask",{
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
       setTotaltask(response.data.task);
     } catch (error) {
       console.error("Error fetching tasks", error);

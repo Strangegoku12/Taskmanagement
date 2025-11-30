@@ -1,6 +1,7 @@
 import '../App.css'
 import { MdOutlineDashboardCustomize } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import ProtectedRoute from "../Components/Protectedroute";
 
 function Sidenavbar() {
 
@@ -36,12 +37,14 @@ function Sidenavbar() {
               </a>
             </li>
 
+              <ProtectedRoute allowedRoles={["admin"]}>
             <li className="mb-2 hovereringnavbar">
               <a href="/employees" className="flex items-center gap-2 text-gray-800">
                 <MdOutlineDashboardCustomize className="text-xl" />
                 <span>Employee</span>
               </a>
             </li>
+            </ProtectedRoute>
 
             <li className="mb-2 hovereringnavbar">
               <a href="/task" className="flex items-center gap-2 text-gray-800">

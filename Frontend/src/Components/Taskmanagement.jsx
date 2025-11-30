@@ -7,6 +7,7 @@ import {
   TextField,
   Table,
   TableBody,
+  MenuItem,
   TableCell,
   TableContainer,
   TableHead,
@@ -86,23 +87,33 @@ function Taskmanagement() {
   };
 
   // Submit Add Task Form
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post("http://localhost:4000/addtask", formData);
-      fetchTasks();  // Refresh table
-      setOpen(false);
-      setFormData({
-        name: "",
-        tasktitle: "",
-        status: "",
-        totaltime: "",
-        createdby: "",
-      });
-    } catch (error) {
-      console.error("Error adding a task", error);
-    }
-  };
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      try {
+        const token = localStorage.getItem("token");
+
+        await axios.post(
+          "http://localhost:4000/addtask",
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        fetchTasks();  // Refresh table
+        setOpen(false);
+        setFormData({
+          name: "",
+          tasktitle: "",
+          status: "",
+          totaltime: "",
+          createdby: "",
+        });
+      } catch (error) {
+        console.error("Error adding a task", error);
+      }
+    };
   async function deletetask(id) {
     if (!window.confirm("Are you sure you want to delete this task?")) return;
 
@@ -226,9 +237,9 @@ function Taskmanagement() {
                 onChange={handleFormChange}
                 required
               >
-                <option value="Pending">Pending</option>
-                <option value="Completed">Completed</option>
-                <option value="InProgress">InProgress</option>
+                <MenuItem value="Pending">Pending</MenuItem>
+                <MenuItem value="Completed">Completed</MenuItem>
+                <MenuItem value="InProgress">InProgress</MenuItem>
               </TextField>
               <TextField fullWidth label="Total Time" name="totaltime" size="small" value={formData.totaltime} onChange={handleFormChange} required />
               <TextField fullWidth label="Created By" name="createdby" size="small" value={formData.createdby} onChange={handleFormChange} required />
