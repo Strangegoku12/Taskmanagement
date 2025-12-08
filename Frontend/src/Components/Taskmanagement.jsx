@@ -129,6 +129,19 @@ function Taskmanagement() {
     }
   }
 
+    async function completedtask(id) {
+
+    try {
+      const response = await axios.put(`http://localhost:4000/updatetask/${id}`);
+
+      if (response.status === 200) {
+        fetchTasks();  // refresh table
+      }
+    } catch (error) {
+      console.log(error);
+      alert("Error deleting employee");
+    }
+  }
 
   return (
     <div className="flex h-screen">
@@ -165,6 +178,7 @@ function Taskmanagement() {
                   <TableCell className="whitespace-nowrap"><b>Total Time</b></TableCell>
                   <TableCell className="whitespace-nowrap"><b>Created By</b></TableCell>
                   <TableCell className="whitespace-nowrap"><b>Created At</b></TableCell>
+                  <TableCell><b>TaskAction</b></TableCell>
                   <TableCell><b>Action</b></TableCell>
                 </TableRow>
               </TableHead>
@@ -178,7 +192,12 @@ function Taskmanagement() {
                     <TableCell>{row.totaltime}</TableCell>
                     <TableCell>{row.createdby}</TableCell>
                     <TableCell>{row.createdAt.substring(0, 10)}</TableCell>
-                    <TableCell align="center">
+                      <TableCell align="center">
+                     <Button  variant="contained" color="primary" onClick={() => completedtask(row._id)}>
+                      Update
+                    </Button>
+                    </TableCell>
+                      <TableCell align="center">
                     <Button  variant="contained" color="error" onClick={() => deletetask(row._id)}>
                       Delete
                     </Button>

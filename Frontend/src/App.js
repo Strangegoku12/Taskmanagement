@@ -1,4 +1,5 @@
 import './App.css';
+import Counter from './Components/Counter';
 import Routerdata from './Routing/Routerdata';
 
 
@@ -6,8 +7,9 @@ function App() {
 
   return (
     <>
-  <Routerdata/>
-      
+  {/* <Routerdata/> */}/
+  <Counter/>
+
     </>
   );
 }
