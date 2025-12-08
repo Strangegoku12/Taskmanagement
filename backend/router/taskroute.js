@@ -15,7 +15,7 @@ router.post("/addtask", authMiddleware, async (req, res) => {
       status,
       totaltime,
       createdby,
-      userId: req.user.id,   
+      userId: req.user.id,
     });
 
     await newtask.save();
@@ -56,5 +56,49 @@ router.delete("/deletetask/:id", async (req, res) => {
     res.status(500).send({ message: "Internal Server Error" });
   }
 });
+
+router.put("/updatetask/:id", async (req, res) => {
+  try {
+    const taskupdated = await taskModel.findById(req.params.id);
+
+    if (!taskupdated) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    taskupdated.status = "Completed";
+
+    await taskupdated.save();
+
+    res.json({ message: "Task updated successfully", task: taskupdated });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Internal Server Error" });
+  }
+});
+
+
+router.get("/taskchart",async(req,res)=>{
+  try{
+    const totaltaskststatus=await taskModel.find()
+    let totalpending=0
+    let totalcompletetd=0
+    for(let i=0;i<totaltaskststatus.length;i++)
+    {
+      if(totaltaskststatus[i].status == 'Pending')
+      {
+        totalpending+=1
+      }
+      if(totaltaskststatus[i].status == 'Completed')
+      {
+        totalcompletetd+=1
+      }
+
+    }
+    res.status(200).json({tasklength:totalpending,totalcompletetd})
+  }catch(error){
+    res.status(500).send({ message: "Internal Server Error" });
+
+  }
+})
 
 module.exports = router;
