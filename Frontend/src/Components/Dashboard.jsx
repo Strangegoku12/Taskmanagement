@@ -22,70 +22,36 @@ import {
 } from '@mui/material';
 
 function Dashboard() {
-  const [chartData] = useState({
-    series: [20, 20, 60],
-    options: {
-      chart: {
-        type: 'donut',
-      },
-      labels: ["Pending", "Completed", "In-Progress"],
-      legend: {
-        show: true,
-        position: 'bottom',            // move legend to bottom :contentReference[oaicite:0]{index=0}
-        horizontalAlign: 'center',
-      },
-      plotOptions: {
-        pie: {
-          donut: {
-            labels: {
-              show: true,                // show donut labels
-              name: {
-                show: true,              // show the name (“Pending”, etc.)
-                fontSize: '16px',
-                color: '#000',
-                formatter: (val) => val, // just the label name
-              },
-              value: {
-                show: true,              // show the value number
-                fontSize: '16px',
-                color: '#000',
-                formatter: (val) => val, // show raw value, not percentage :contentReference[oaicite:1]{index=1}
-              },
-              total: {
-                show: true,
-                label: 'Total',
-                formatter: (w) => {
-                  // w.globals.seriesTotals gives sum of series
-                  return w.globals.seriesTotals.reduce((a, b) => a + b, 0)
-                }
-              }
+  const [pendingtask, setPendingtask] = useState(0);
+const [completedtask, setCompletedtask] = useState(0);
+
+const [chartData, setChartData] = useState({
+  series: [0, 0, 0],   // initial empty chart
+  options: {
+    chart: { type: 'donut' },
+    labels: ["Pending", "Completed", "In-Progress"],
+    legend: { show: true, position: 'bottom', horizontalAlign: 'center' },
+    plotOptions: {
+      pie: {
+        donut: {
+          labels: {
+            show: true,
+            total: {
+              show: true,
+              label: "Total",
+              formatter: w => w.globals.seriesTotals.reduce((a, b) => a + b, 0)
             }
           }
         }
-      },
-      dataLabels: {
-        enabled: true,
-        formatter: (val, opts) => {
-          // opts.w.config.series gives the raw series value for that index
-          const rawValue = opts.w.config.series[opts.seriesIndex];
-          return rawValue; // display raw value instead of percentage :contentReference[oaicite:2]{index=2}
-        }
-      },
-      responsive: [
-        {
-          breakpoint: 480,
-          options: {
-            chart: { width: 200 },
-            legend: { position: 'bottom' }
-          }
-        }
-      ],
-      title: {
-        text: "Project Performance",
-        style: { fontSize: "18px", fontWeight: "bold" },
-      },
+      }
+    },
+    dataLabels: {
+      enabled: true,
+      formatter: (val, opts) => opts.w.config.series[opts.seriesIndex]
     }
-  });
+  }
+});
+
   const [empPerformance] = useState({
     series: [
       {
@@ -141,9 +107,17 @@ function Dashboard() {
     const [getallemployees, setAllemployees] = useState([]);
 
 
+
   async function totaltaskapi() {
     try {
-      const response = await axios.get("http://localhost:4000/gettask");
+       const token = localStorage.getItem("token");
+
+      const response = await axios.get("http://localhost:4000/gettask",{
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
       setTotaltask(response.data.task);
     } catch (error) {
       console.error("Error fetching tasks", error);
@@ -159,10 +133,31 @@ function Dashboard() {
     }
   }
 
+
+async function getpendingtask() {
+  try {
+    const response = await axios.get("http://localhost:4000/taskchart");
+
+    setPendingtask(response.data.tasklength);
+    setCompletedtask(response.data.totalcompletetd);
+
+  } catch (error) {
+    console.log(error);
+  }
+}
+
   useEffect(() => {
     getallemployeesdata();
     totaltaskapi()
-  }, []);
+    getpendingtask()
+      const inProgress = 60; // or calculate dynamically
+
+  setChartData(prev => ({
+    ...prev,
+    series: [pendingtask, completedtask, inProgress]
+  }));
+
+  }, [pendingtask, completedtask]);
 
   return (
     <div className="flex h-screen">

@@ -4,6 +4,7 @@ import {
   IconButton,
   Button,
   TextField,
+  MenuItem,
   Table,
   TableBody,
   TableCell,
@@ -199,7 +200,10 @@ function Employees() {
             <TextField fullWidth name="empid" label="Employee ID" size="small" onChange={handleformchange} />
             <TextField fullWidth name="fullname" label="Full Name" size="small" onChange={handleformchange} />
             <TextField fullWidth type="date" name="date_of_birth" size="small" onChange={handleformchange} />
-            <TextField fullWidth name="gender" label="Gender" size="small" onChange={handleformchange} />
+            <TextField select fullWidth name="gender" label="Gender" size="small" onChange={handleformchange} >
+   <MenuItem value="male">Male</MenuItem>
+              <MenuItem value="female">Female</MenuItem>
+              </TextField>
             <TextField fullWidth name="phone_number" label="Phone Number" size="small" onChange={handleformchange} />
             <TextField fullWidth name="email" label="Email ID" size="small" onChange={handleformchange} />
             <TextField fullWidth name="department" label="Department" size="small" onChange={handleformchange} />

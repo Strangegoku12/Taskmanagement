@@ -7,6 +7,7 @@ import {
   TextField,
   Table,
   TableBody,
+  MenuItem,
   TableCell,
   TableContainer,
   TableHead,
@@ -86,23 +87,33 @@ function Taskmanagement() {
   };
 
   // Submit Add Task Form
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post("http://localhost:4000/addtask", formData);
-      fetchTasks();  // Refresh table
-      setOpen(false);
-      setFormData({
-        name: "",
-        tasktitle: "",
-        status: "",
-        totaltime: "",
-        createdby: "",
-      });
-    } catch (error) {
-      console.error("Error adding a task", error);
-    }
-  };
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      try {
+        const token = localStorage.getItem("token");
+
+        await axios.post(
+          "http://localhost:4000/addtask",
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        fetchTasks();  // Refresh table
+        setOpen(false);
+        setFormData({
+          name: "",
+          tasktitle: "",
+          status: "",
+          totaltime: "",
+          createdby: "",
+        });
+      } catch (error) {
+        console.error("Error adding a task", error);
+      }
+    };
   async function deletetask(id) {
     if (!window.confirm("Are you sure you want to delete this task?")) return;
 
@@ -118,6 +129,19 @@ function Taskmanagement() {
     }
   }
 
+    async function completedtask(id) {
+
+    try {
+      const response = await axios.put(`http://localhost:4000/updatetask/${id}`);
+
+      if (response.status === 200) {
+        fetchTasks();  // refresh table
+      }
+    } catch (error) {
+      console.log(error);
+      alert("Error deleting employee");
+    }
+  }
 
   return (
     <div className="flex h-screen">
@@ -154,6 +178,7 @@ function Taskmanagement() {
                   <TableCell className="whitespace-nowrap"><b>Total Time</b></TableCell>
                   <TableCell className="whitespace-nowrap"><b>Created By</b></TableCell>
                   <TableCell className="whitespace-nowrap"><b>Created At</b></TableCell>
+                  <TableCell><b>TaskAction</b></TableCell>
                   <TableCell><b>Action</b></TableCell>
                 </TableRow>
               </TableHead>
@@ -167,7 +192,12 @@ function Taskmanagement() {
                     <TableCell>{row.totaltime}</TableCell>
                     <TableCell>{row.createdby}</TableCell>
                     <TableCell>{row.createdAt.substring(0, 10)}</TableCell>
-                    <TableCell align="center">
+                      <TableCell align="center">
+                     <Button  variant="contained" color="primary" onClick={() => completedtask(row._id)}>
+                      Update
+                    </Button>
+                    </TableCell>
+                      <TableCell align="center">
                     <Button  variant="contained" color="error" onClick={() => deletetask(row._id)}>
                       Delete
                     </Button>
@@ -226,9 +256,9 @@ function Taskmanagement() {
                 onChange={handleFormChange}
                 required
               >
-                <option value="Pending">Pending</option>
-                <option value="Completed">Completed</option>
-                <option value="InProgress">InProgress</option>
+                <MenuItem value="Pending">Pending</MenuItem>
+                <MenuItem value="Completed">Completed</MenuItem>
+                <MenuItem value="InProgress">InProgress</MenuItem>
               </TextField>
               <TextField fullWidth label="Total Time" name="totaltime" size="small" value={formData.totaltime} onChange={handleFormChange} required />
               <TextField fullWidth label="Created By" name="createdby" size="small" value={formData.createdby} onChange={handleFormChange} required />
