@@ -70,7 +70,7 @@ function About() {
               <div className="flex gap-6">
 
                 <div className="flex-1 space-y-4">
-                  <h1 className="text-xl font-semibold mb-2">User Profiles</h1>
+                  <h1 className="text-xl font-semibold mb-2">User Profile</h1>
 
                   <div>
                     <label className="font-medium">Employee ID:</label>
